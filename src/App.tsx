@@ -1,11 +1,12 @@
 import { FC, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
+import { auth, db } from "./shared/firebase";
+import { doc, setDoc } from "firebase/firestore";
 
 import BarWave from "react-cssfx-loading/src/BarWave";
 import Home from "./pages/Home";
 import PrivateRoute from "./components/PrivateRoute";
 import SignIn from "./pages/SignIn";
-import { auth } from "./shared/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { useStore } from "./store";
 
@@ -15,8 +16,16 @@ const App: FC = () => {
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
-      if (user) setCurrentUser(user);
-      else setCurrentUser(null);
+      if (user) {
+        setCurrentUser(user);
+        setDoc(doc(db, "users", user.uid), {
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName,
+          photoURL: user.photoURL,
+          phoneNumber: user.phoneNumber || user.providerData?.[0]?.phoneNumber,
+        });
+      } else setCurrentUser(null);
     });
   }, []);
 

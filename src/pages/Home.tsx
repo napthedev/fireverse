@@ -1,12 +1,15 @@
 import { FC } from "react";
+import SideBar from "../components/Home/SideBar";
 import { useStore } from "../store";
 
 const Home: FC = () => {
   const currentUser = useStore((state) => state.currentUser);
 
   return (
-    <div>
-      <pre>{JSON.stringify(currentUser, null, 2)}</pre>
+    <div className="flex">
+      <SideBar />
+
+      <div className="flex-grow">Right</div>
     </div>
   );
 };
