@@ -5,3 +5,28 @@
 body {
   @apply bg-dark text-gray-100;
 }
+
+input[type="checkbox"] {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3l6-6'/%3e%3c/svg%3e");
+  @apply appearance-none outline-none w-4 h-4 rounded bg-white transition-all duration-300 checked:bg-primary;
+}
+
+::-webkit-scrollbar {
+  @apply w-[10px] h-[10px];
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-[#666] rounded-2xl;
+  border: 1px solid #191a1f;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-[#777];
+}
+::-webkit-scrollbar-button {
+  @apply hidden;
+}

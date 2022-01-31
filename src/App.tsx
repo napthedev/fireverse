@@ -4,6 +4,7 @@ import { auth, db } from "./shared/firebase";
 import { doc, setDoc } from "firebase/firestore";
 
 import BarWave from "react-cssfx-loading/src/BarWave";
+import Chat from "./pages/Chat";
 import Home from "./pages/Home";
 import PrivateRoute from "./components/PrivateRoute";
 import SignIn from "./pages/SignIn";
@@ -47,6 +48,14 @@ const App: FC = () => {
         }
       />
       <Route path="sign-in" element={<SignIn />} />
+      <Route
+        path=":id"
+        element={
+          <PrivateRoute>
+            <Chat />
+          </PrivateRoute>
+        }
+      />
     </Routes>
   );
 };
