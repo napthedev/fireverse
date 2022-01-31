@@ -111,6 +111,7 @@ const SideBar: FC = () => {
           <div>
             {data?.docs.map((item) => (
               <SelectConversation
+                key={item.id}
                 conversation={item.data() as ConversationInfo}
                 conversationId={item.id}
               />

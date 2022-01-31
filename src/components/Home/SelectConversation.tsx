@@ -46,7 +46,7 @@ const SelectConversation: FC<SelectConversationProps> = ({
       <Link
         to={`/${conversationId}`}
         className={`flex items-stretch py-2 px-5 gap-2 hover:bg-dark-lighten transition duration-300 ${
-          conversationId === id ? "!bg-[#252F3C]" : ""
+          conversationId === id ? "!bg-[#263342]" : ""
         }`}
       >
         <img
@@ -68,7 +68,7 @@ const SelectConversation: FC<SelectConversationProps> = ({
   return (
     <Link
       to={`/${conversationId}`}
-      className={`flex items-stretch py-2 px-5 gap-2 hover:bg-dark-lighten transition duration-300 ${
+      className={`flex items-stretch py-2 px-5 gap-2 hover:bg-dark-lighten group transition duration-300 ${
         conversationId === id ? "!bg-[#252F3C]" : ""
       }`}
     >
@@ -79,17 +79,16 @@ const SelectConversation: FC<SelectConversationProps> = ({
           alt=""
         />
         <img
-          className="w-10 h-10 rounded-full flex-shrink-0 object-cover absolute bottom-0 left-0 z-[1] border-dark border-4"
+          className={`w-10 h-10 rounded-full flex-shrink-0 object-cover absolute bottom-0 left-0 z-[1] border-4 border-dark group-hover:border-dark-lighten transition duration-300 ${
+            conversationId === id ? "!border-[#252F3C]" : ""
+          }`}
           src={IMAGE_PROXY(filtered?.[1]?.data()?.photoURL)}
           alt=""
         />
       </div>
       <div className="flex-grow flex flex-col items-start py-1 gap-1">
         <p className="whitespace-nowrap overflow-hidden text-ellipsis max-w-[240px]">
-          {users
-            ?.filter((user) => user.id !== currentUser?.uid)
-            ?.map((user) => user.data()?.displayName)
-            .join(", ")}
+          {filtered?.map((user) => user.data()?.displayName).join(", ")}
         </p>
         {lastMessageLoading ? (
           <Skeleton className="w-2/3 flex-grow" />

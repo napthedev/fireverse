@@ -14,3 +14,13 @@ export interface SavedUser {
   photoURL: string;
   phoneNumber: string | null;
 }
+
+export interface MessageItem {
+  sender: string;
+  content: string;
+  createdAt: {
+    seconds: number;
+    nanoseconds: number;
+  };
+  type: "text" | "image" | "file" | "removed";
+}
