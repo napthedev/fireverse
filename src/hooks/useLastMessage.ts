@@ -11,12 +11,8 @@ import { useEffect, useState } from "react";
 
 import { db } from "../shared/firebase";
 
-let cache: { [key: string]: any } = {};
-
 export const useLastMessage = (conversationId: string) => {
-  const [data, setData] = useState<QuerySnapshot<DocumentData> | null>(
-    cache[conversationId] || null
-  );
+  const [data, setData] = useState<QuerySnapshot<DocumentData> | null>(null);
   const [loading, setLoading] = useState(!data);
   const [error, setError] = useState(false);
 
@@ -33,7 +29,6 @@ export const useLastMessage = (conversationId: string) => {
             ? "No message recently"
             : snapshot.docs[0].data().content;
         setData(response);
-        cache[conversationId] = response;
         setLoading(false);
         setError(false);
       },

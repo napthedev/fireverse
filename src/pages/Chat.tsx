@@ -41,7 +41,7 @@ const Chat: FC = () => {
         ) : (
           <>
             <ChatHeader conversation={conversation} />
-            <ChatView />
+            <ChatView conversation={conversation} />
             <InputSection />
           </>
         )}

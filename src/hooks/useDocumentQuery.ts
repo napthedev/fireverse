@@ -19,6 +19,10 @@ export const useDocumentQuery = (
   const [error, setError] = useState(false);
 
   useEffect(() => {
+    setData(cache[key] || null);
+    setLoading(!(cache[key] || null));
+    setError(false);
+
     const unsubscribe = onSnapshot(
       document,
       (snapshot) => {

@@ -1,4 +1,4 @@
-import { FC, FormEvent, useState } from "react";
+import { FC, FormEvent, useRef, useState } from "react";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 
 import { db } from "../../shared/firebase";
@@ -10,6 +10,8 @@ const InputSection: FC = () => {
 
   const { id: conversationId } = useParams();
   const currentUser = useStore((state) => state.currentUser);
+
+  const imageInputRef = useRef<HTMLInputElement>(null);
 
   const handleFormSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -31,9 +33,19 @@ const InputSection: FC = () => {
 
   return (
     <div className="flex items-stretch h-16 px-4 gap-1 border-t border-dark-lighten">
-      <button className="flex-shrink-0 text-2xl text-primary flex items-center">
+      <button
+        onClick={() => imageInputRef.current?.click()}
+        className="flex-shrink-0 text-2xl text-primary flex items-center"
+      >
         <i className="bx bxs-image-add"></i>
       </button>
+      <input
+        ref={imageInputRef}
+        hidden
+        className="hidden"
+        type="file"
+        accept="image/*"
+      />
       <button className="flex-shrink-0 text-2xl text-primary flex items-center">
         <i className="bx bx-link-alt"></i>
       </button>
