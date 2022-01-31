@@ -51,7 +51,9 @@ const ChatView: FC<ChatViewProps> = ({ conversation }) => {
                         {item.content}
                       </div>
                     ) : (
-                      <div></div>
+                      <div>
+                        <img src={item.content} alt="" />
+                      </div>
                     )}
                   </div>
                 ) : (
@@ -75,7 +77,9 @@ const ChatView: FC<ChatViewProps> = ({ conversation }) => {
                         {item.content}
                       </div>
                     ) : (
-                      <div></div>
+                      <div>
+                        <img src={item.content} alt="" />
+                      </div>
                     )}
                   </div>
                 )}

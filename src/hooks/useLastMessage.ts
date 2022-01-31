@@ -27,6 +27,8 @@ export const useLastMessage = (conversationId: string) => {
         const response =
           snapshot.docs.length === 0
             ? "No message recently"
+            : snapshot.docs[0].data().type === "image"
+            ? "An image"
             : snapshot.docs[0].data().content;
         setData(response);
         setLoading(false);
