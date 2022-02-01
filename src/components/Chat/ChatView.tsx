@@ -1,5 +1,5 @@
 import { ConversationInfo, MessageItem } from "../../shared/types";
-import { FC, Fragment } from "react";
+import { FC, Fragment, useEffect, useRef } from "react";
 import { collection, limitToLast, orderBy, query } from "firebase/firestore";
 
 import AvatarFromId from "./AvatarFromId";
@@ -18,6 +18,8 @@ const ChatView: FC<ChatViewProps> = ({ conversation }) => {
 
   const currentUser = useStore((state) => state.currentUser);
 
+  const containerRef = useRef<HTMLDivElement>(null);
+
   const { data, loading, error } = useCollectionQuery(
     `conversation-data-${conversationId}`,
     query(
@@ -27,8 +29,18 @@ const ChatView: FC<ChatViewProps> = ({ conversation }) => {
     )
   );
 
+  useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.scrollTop =
+        containerRef.current.scrollHeight - containerRef.current.clientHeight;
+    }
+  }, [data?.docs?.length]);
+
   return (
-    <div className="flex-grow flex flex-col justify-end items-stretch gap-3 py-3">
+    <div
+      ref={containerRef}
+      className="flex flex-col items-stretch gap-3 py-3 h-[calc(100vh-144px)] overflow-x-hidden overflow-y-auto"
+    >
       {loading ? (
         <div className="w-full h-full flex justify-center items-center">
           <Spin />
@@ -43,7 +55,7 @@ const ChatView: FC<ChatViewProps> = ({ conversation }) => {
           {data?.docs
             .map((doc) => doc.data() as MessageItem)
             .map((item, index) => (
-              <Fragment key={item.createdAt?.nanoseconds}>
+              <Fragment key={item.createdAt?.nanoseconds || Date.now()}>
                 {item.sender === currentUser?.uid ? (
                   <div className="flex flex-row-reverse items-center px-8">
                     {item.type === "text" ? (
@@ -51,9 +63,7 @@ const ChatView: FC<ChatViewProps> = ({ conversation }) => {
                         {item.content}
                       </div>
                     ) : (
-                      <div>
-                        <img src={item.content} alt="" />
-                      </div>
+                      <img className="max-w-[60%]" src={item.content} alt="" />
                     )}
                   </div>
                 ) : (
@@ -77,9 +87,7 @@ const ChatView: FC<ChatViewProps> = ({ conversation }) => {
                         {item.content}
                       </div>
                     ) : (
-                      <div>
-                        <img src={item.content} alt="" />
-                      </div>
+                      <img className="max-w-[60%]" src={item.content} alt="" />
                     )}
                   </div>
                 )}

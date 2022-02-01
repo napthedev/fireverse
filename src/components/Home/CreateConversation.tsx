@@ -1,10 +1,18 @@
 import { FC, useState } from "react";
-import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  getDocs,
+  query,
+  serverTimestamp,
+  where,
+} from "firebase/firestore";
 
 import { IMAGE_PROXY } from "../../shared/constants";
 import Spin from "react-cssfx-loading/src/Spin";
 import { db } from "../../shared/firebase";
 import { useCollectionQuery } from "../../hooks/useCollectionQuery";
+import { useNavigate } from "react-router-dom";
 import { useStore } from "../../store";
 
 interface CreateConversationProps {
@@ -22,6 +30,8 @@ const CreateConversation: FC<CreateConversationProps> = ({ setIsOpened }) => {
   const currentUser = useStore((state) => state.currentUser);
 
   const [selected, setSelected] = useState<string[]>([]);
+
+  const navigate = useNavigate();
 
   const handleToggle = (uid: string) => {
     if (selected.includes(uid)) {
@@ -44,7 +54,7 @@ const CreateConversation: FC<CreateConversationProps> = ({ setIsOpened }) => {
     const querySnapshot = await getDocs(q);
 
     if (querySnapshot.docs.length === 0) {
-      addDoc(collection(db, "conversations"), {
+      const created = await addDoc(collection(db, "conversations"), {
         users: sorted,
         group:
           selected.length > 2
@@ -54,11 +64,18 @@ const CreateConversation: FC<CreateConversationProps> = ({ setIsOpened }) => {
                 groupImage: null,
               }
             : null,
-      }).then(() => {
-        setIsCreating(false);
+        updatedAt: serverTimestamp(),
       });
+
+      setIsCreating(false);
+
+      setIsOpened(false);
+
+      navigate(`/${created.id}`);
     } else {
-      console.log(querySnapshot.docs[0].data());
+      setIsOpened(false);
+
+      navigate(`/${querySnapshot.docs[0].id}`);
 
       setIsCreating(false);
     }

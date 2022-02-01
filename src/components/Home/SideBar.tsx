@@ -1,6 +1,6 @@
 import { DEFAULT_AVATAR, IMAGE_PROXY } from "../../shared/constants";
 import { FC, useState } from "react";
-import { collection, query, where } from "firebase/firestore";
+import { collection, orderBy, query, where } from "firebase/firestore";
 
 import ClickAwayListener from "../ClickAwayListener";
 import { ConversationInfo } from "../../shared/types";
@@ -25,6 +25,7 @@ const SideBar: FC = () => {
     "conversations",
     query(
       collection(db, "conversations"),
+      orderBy("updatedAt", "desc"),
       where("users", "array-contains", currentUser?.uid)
     )
   );
@@ -106,6 +107,16 @@ const SideBar: FC = () => {
                 </div>
               </div>
             ))}
+          </div>
+        ) : data?.docs.length === 0 ? (
+          <div className="flex-grow flex flex-col justify-center items-center">
+            <p className="text-center">No conversation found</p>
+            <button
+              onClick={() => setCreateConversationOpened(true)}
+              className="text-center text-primary"
+            >
+              Create one
+            </button>
           </div>
         ) : (
           <div>
