@@ -57,64 +57,15 @@ const InputSection: FC = () => {
     updateTimestamp();
   };
 
-  const handleImageInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-
-    if (!file) return;
-
-    if (!file.type.startsWith("image")) {
-      setAlertText("The selected file is not an image");
-      setIsAlertOpened(true);
-      return;
-    }
-
-    const TEN_MB = 1024 * 1024 * 10;
-
-    if (file.size > TEN_MB) {
-      setAlertText("Max image size is 10MB");
-      setIsAlertOpened(true);
-      return;
-    }
-
-    setFileUploading(true);
-
-    const fileReference = ref(storage, formatFileName(file.name));
-
-    uploadBytes(fileReference, file)
-      .then(() => {
-        getDownloadURL(fileReference).then((url) => {
-          addDoc(
-            collection(
-              db,
-              "conversations",
-              conversationId as string,
-              "messages"
-            ),
-            {
-              sender: currentUser?.uid,
-              content: url,
-              type: "image",
-              createdAt: serverTimestamp(),
-            }
-          ).then(() => {
-            setFileUploading(false);
-          });
-
-          updateTimestamp();
-        });
-      })
-      .catch(() => setFileUploading(false));
-  };
-
   const handleFileInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
 
     if (!file) return;
 
-    const THIRTY_MB = 1024 * 1024 * 30;
+    const TWENTY_MB = 1024 * 1024 * 20;
 
-    if (file.size > THIRTY_MB) {
-      setAlertText("Max file size is 30MB");
+    if (file.size > TWENTY_MB) {
+      setAlertText("Max file size is 20MB");
       setIsAlertOpened(true);
       return;
     }
@@ -136,7 +87,7 @@ const InputSection: FC = () => {
             {
               sender: currentUser?.uid,
               content: url,
-              type: "file",
+              type: file.name.startsWith("image") ? "image" : "file",
               file: {
                 name: file.name,
                 size: file.size,
@@ -168,7 +119,7 @@ const InputSection: FC = () => {
           className="hidden"
           type="file"
           accept="image/*"
-          onChange={handleImageInputChange}
+          onChange={handleFileInputChange}
         />
         <button
           onClick={() => fileInputRef.current?.click()}
@@ -220,6 +171,7 @@ const InputSection: FC = () => {
               className="w-full h-9 px-3 bg-dark-lighten outline-none rounded-full"
               type="text"
               placeholder="Message..."
+              autoFocus
             />
           </div>
           {fileUploading ? (

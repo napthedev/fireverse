@@ -9,6 +9,7 @@ import { db } from "../shared/firebase";
 import { doc } from "firebase/firestore";
 import { useDocumentQuery } from "../hooks/useDocumentQuery";
 import { useParams } from "react-router-dom";
+import { useStore } from "../store";
 
 const Chat: FC = () => {
   const { id } = useParams();
@@ -19,6 +20,8 @@ const Chat: FC = () => {
   );
 
   const conversation = data?.data() as ConversationInfo;
+
+  const currentUser = useStore((state) => state.currentUser);
 
   return (
     <div className="flex">
@@ -33,7 +36,9 @@ const Chat: FC = () => {
               <Skeleton className="h-6 w-1/4" />
             </div>
           </div>
-        ) : !conversation || error ? (
+        ) : !conversation ||
+          error ||
+          !conversation.users.includes(currentUser?.uid as string) ? (
           <div className="w-full h-full flex flex-col justify-center items-center gap-6">
             <img className="w-32 h-32 object-cover" src="/error.svg" alt="" />
             <p className="text-lg text-center">Conversation does not exists</p>

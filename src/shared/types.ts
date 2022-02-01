@@ -16,6 +16,7 @@ export interface SavedUser {
 }
 
 export interface MessageItem {
+  id?: string;
   sender: string;
   content: string;
   file?: {
@@ -27,4 +28,7 @@ export interface MessageItem {
     nanoseconds: number;
   };
   type: "text" | "image" | "file" | "removed";
+  reactions: {
+    [key: string]: number;
+  };
 }
