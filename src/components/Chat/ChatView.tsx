@@ -5,6 +5,7 @@ import { collection, limitToLast, orderBy, query } from "firebase/firestore";
 import AvatarFromId from "./AvatarFromId";
 import Spin from "react-cssfx-loading/src/Spin";
 import { db } from "../../shared/firebase";
+import { formatFileSize } from "../../shared/utils";
 import { useCollectionQuery } from "../../hooks/useCollectionQuery";
 import { useParams } from "react-router-dom";
 import { useStore } from "../../store";
@@ -62,8 +63,31 @@ const ChatView: FC<ChatViewProps> = ({ conversation }) => {
                       <div className="bg-primary text-white p-2 rounded-lg relative after:absolute after:left-full after:bottom-[6px] after:border-8 after:border-primary after:border-t-transparent after:border-r-transparent">
                         {item.content}
                       </div>
-                    ) : (
+                    ) : item.type === "image" ? (
                       <img className="max-w-[60%]" src={item.content} alt="" />
+                    ) : item.type === "file" ? (
+                      <div className="bg-dark-lighten flex items-center gap-2 rounded-lg overflow-hidden py-3 px-5">
+                        <div>
+                          <p className="max-w-[100px] overflow-hidden text-ellipsis whitespace-nowrap">
+                            {item.file?.name}
+                          </p>
+
+                          <p className="text-sm text-gray-400">
+                            {formatFileSize(item.file?.size as number)}
+                          </p>
+                        </div>
+
+                        <a
+                          href={item.content}
+                          download
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <i className="bx bxs-download text-2xl"></i>
+                        </a>
+                      </div>
+                    ) : (
+                      <div>Removed</div>
                     )}
                   </div>
                 ) : (
@@ -86,8 +110,31 @@ const ChatView: FC<ChatViewProps> = ({ conversation }) => {
                       >
                         {item.content}
                       </div>
-                    ) : (
+                    ) : item.type === "image" ? (
                       <img className="max-w-[60%]" src={item.content} alt="" />
+                    ) : item.type === "file" ? (
+                      <div className="bg-dark-lighten flex items-center gap-2 rounded-lg overflow-hidden py-3 px-5">
+                        <div>
+                          <p className="max-w-[100px] overflow-hidden text-ellipsis whitespace-nowrap">
+                            {item.file?.name}
+                          </p>
+
+                          <p className="text-sm text-gray-400">
+                            {formatFileSize(item.file?.size as number)}
+                          </p>
+                        </div>
+
+                        <a
+                          href={item.content}
+                          download
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <i className="bx bxs-download text-2xl"></i>
+                        </a>
+                      </div>
+                    ) : (
+                      <div>Removed</div>
                     )}
                   </div>
                 )}

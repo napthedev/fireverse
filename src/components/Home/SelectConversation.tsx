@@ -55,11 +55,15 @@ const SelectConversation: FC<SelectConversationProps> = ({
           alt=""
         />
         <div className="flex-grow flex flex-col items-start py-1 gap-1">
-          <p className="flex-grow">{filtered?.[0].data()?.displayName}</p>
+          <p className="flex-grow whitespace-nowrap overflow-hidden text-ellipsis max-w-[240px]">
+            {filtered?.[0].data()?.displayName}
+          </p>
           {lastMessageLoading ? (
             <Skeleton className="w-2/3 flex-grow" />
           ) : (
-            <p className="flex-grow text-sm text-gray-400">{lastMessage}</p>
+            <p className="flex-grow text-sm text-gray-400 whitespace-nowrap overflow-hidden text-ellipsis max-w-[240px]">
+              {lastMessage}
+            </p>
           )}
         </div>
       </Link>
@@ -93,7 +97,9 @@ const SelectConversation: FC<SelectConversationProps> = ({
         {lastMessageLoading ? (
           <Skeleton className="w-2/3 flex-grow" />
         ) : (
-          <p className="flex-grow text-sm text-gray-400">{lastMessage}</p>
+          <p className="flex-grow text-sm text-gray-400 whitespace-nowrap overflow-hidden text-ellipsis max-w-[240px]">
+            {lastMessage}
+          </p>
         )}
       </div>
     </Link>

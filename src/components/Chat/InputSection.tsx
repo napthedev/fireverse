@@ -27,6 +27,13 @@ const InputSection: FC = () => {
   const currentUser = useStore((state) => state.currentUser);
 
   const imageInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const updateTimestamp = () => {
+    updateDoc(doc(db, "conversations", conversationId as string), {
+      updatedAt: serverTimestamp(),
+    });
+  };
 
   const handleFormSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -99,10 +106,51 @@ const InputSection: FC = () => {
       .catch(() => setFileUploading(false));
   };
 
-  const updateTimestamp = () => {
-    updateDoc(doc(db, "conversations", conversationId as string), {
-      updatedAt: serverTimestamp(),
-    });
+  const handleFileInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+
+    if (!file) return;
+
+    const THIRTY_MB = 1024 * 1024 * 30;
+
+    if (file.size > THIRTY_MB) {
+      setAlertText("Max file size is 30MB");
+      setIsAlertOpened(true);
+      return;
+    }
+
+    setFileUploading(true);
+
+    const fileReference = ref(storage, formatFileName(file.name));
+
+    uploadBytes(fileReference, file)
+      .then(() => {
+        getDownloadURL(fileReference).then((url) => {
+          addDoc(
+            collection(
+              db,
+              "conversations",
+              conversationId as string,
+              "messages"
+            ),
+            {
+              sender: currentUser?.uid,
+              content: url,
+              type: "file",
+              file: {
+                name: file.name,
+                size: file.size,
+              },
+              createdAt: serverTimestamp(),
+            }
+          ).then(() => {
+            setFileUploading(false);
+          });
+
+          updateTimestamp();
+        });
+      })
+      .catch(() => setFileUploading(false));
   };
 
   return (
@@ -122,9 +170,19 @@ const InputSection: FC = () => {
           accept="image/*"
           onChange={handleImageInputChange}
         />
-        <button className="flex-shrink-0 text-2xl text-primary flex items-center">
+        <button
+          onClick={() => fileInputRef.current?.click()}
+          className="flex-shrink-0 text-2xl text-primary flex items-center"
+        >
           <i className="bx bx-link-alt"></i>
         </button>
+        <input
+          ref={fileInputRef}
+          hidden
+          className="hidden"
+          type="file"
+          onChange={handleFileInputChange}
+        />
         <button className="flex-shrink-0 flex items-center">
           <img className="w-[22px] h-[22px] mx-1" src="/gif.svg" alt="" />
         </button>

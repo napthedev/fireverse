@@ -18,6 +18,10 @@ export interface SavedUser {
 export interface MessageItem {
   sender: string;
   content: string;
+  file?: {
+    name: string;
+    size: number;
+  };
   createdAt: {
     seconds: number;
     nanoseconds: number;

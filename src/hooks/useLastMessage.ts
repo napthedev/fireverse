@@ -33,6 +33,8 @@ export const useLastMessage = (conversationId: string) => {
             ? "No message recently"
             : snapshot.docs[0].data().type === "image"
             ? "An image"
+            : snapshot.docs[0].data().type === "file"
+            ? `File: ${snapshot.docs[0]?.data()?.file?.name}`
             : snapshot.docs[0].data().content;
         setData(response);
         cache[conversationId] = response;
