@@ -28,13 +28,16 @@ export const useLastMessage = (conversationId: string) => {
         limitToLast(1)
       ),
       (snapshot) => {
+        const type = snapshot.docs?.[0]?.data()?.type;
         const response =
           snapshot.docs.length === 0
             ? "No message recently"
-            : snapshot.docs[0].data().type === "image"
+            : type === "image"
             ? "An image"
-            : snapshot.docs[0].data().type === "file"
+            : type === "file"
             ? `File: ${snapshot.docs[0]?.data()?.file?.name}`
+            : type === "removed"
+            ? "Message removed"
             : snapshot.docs[0].data().content;
         setData(response);
         cache[conversationId] = response;
