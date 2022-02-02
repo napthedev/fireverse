@@ -41,6 +41,7 @@ const ReactionStatus: FC<ReactionStatusProps> = ({ message, position }) => {
           .slice(0, 3)
           .map(([key, value]) => (
             <img
+              key={key}
               className="w-3 h-3"
               src={Object.entries(REACTIONS_UI)[Number(key) - 1][1].icon}
               alt=""
@@ -88,7 +89,10 @@ const ReactionStatus: FC<ReactionStatusProps> = ({ message, position }) => {
                 {Object.entries(message.reactions)
                   .filter(([key, value]) => value)
                   .map(([key, value]) => (
-                    <div className="flex justify-between px-5 py-2 items-center">
+                    <div
+                      key={key}
+                      className="flex justify-between px-5 py-2 items-center"
+                    >
                       <div className="flex gap-3 items-center">
                         <img
                           className="w-10 h-10 rounded-full object-cover"

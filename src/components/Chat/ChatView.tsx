@@ -32,10 +32,9 @@ const ChatView: FC<ChatViewProps> = ({ conversation }) => {
 
   useEffect(() => {
     if (containerRef.current) {
-      containerRef.current.scrollTop =
-        containerRef.current.scrollHeight - containerRef.current.clientHeight;
+      containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
-  }, [data?.docs?.length]);
+  }, [data?.size || 0]);
 
   return (
     <div

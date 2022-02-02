@@ -18,49 +18,62 @@ const SpriteRenderer: FC<HTMLProps<HTMLDivElement> & SpriteRendererProps> = ({
 
   const [backgroundPosition, setBackgroundPosition] = useState("");
   const [loaded, setLoaded] = useState(false);
+  const intervalId = useRef<any>(null);
 
   useEffect(() => {
     setLoaded(false);
 
     const img = new Image();
     img.src = src;
-    img.onload = () => {
-      setLoaded(true);
 
-      let stepCount = Math.ceil(img.width / img.height);
+    img.addEventListener(
+      "load",
+      () => {
+        setLoaded(true);
 
-      let count = 0;
+        let stepCount = Math.ceil(img.width / img.height);
 
-      if (runOnHover) {
-        let interval: any;
-        containerRef.current?.addEventListener("mouseenter", () => {
-          interval = setInterval(() => {
+        let count = 0;
+
+        if (runOnHover) {
+          containerRef.current?.addEventListener("mouseenter", () => {
+            intervalId.current = setInterval(() => {
+              if (!containerRef.current) clearInterval(intervalId.current);
+
+              setBackgroundPosition(
+                `${Math.round(-((count % stepCount) + 1) * size)}px 50%`
+              );
+
+              count++;
+            }, delay);
+          });
+
+          containerRef.current?.addEventListener("mouseleave", () => {
+            if (intervalId.current) clearInterval(intervalId.current);
+
+            count = 0;
+
+            setBackgroundPosition(`0px 50%`);
+          });
+        } else {
+          intervalId.current = setInterval(() => {
+            if (!containerRef.current) clearInterval(intervalId.current);
+
             setBackgroundPosition(
               `${Math.round(-((count % stepCount) + 1) * size)}px 50%`
             );
 
             count++;
           }, delay);
-        });
+        }
+      },
+      { once: true }
+    );
 
-        containerRef.current?.addEventListener("mouseleave", () => {
-          if (interval) clearInterval(interval);
-
-          count = 0;
-
-          setBackgroundPosition(`0px 50%`);
-        });
-      } else {
-        setInterval(() => {
-          setBackgroundPosition(
-            `${Math.round(-((count % stepCount) + 1) * size)}px 50%`
-          );
-
-          count++;
-        }, delay);
-      }
+    return () => {
+      if (intervalId.current) clearInterval(intervalId.current);
     };
-  }, [src]);
+  }, []);
 
   return (
     <div

@@ -29,13 +29,11 @@ const Chat: FC = () => {
 
       <div className="flex-grow flex flex-col items-stretch">
         {loading ? (
-          <div className="h-20 flex items-center justify-between px-5 border-b border-dark-lighten">
-            <div className="flex items-center gap-4 flex-grow">
-              <Skeleton className="h-10 w-10 rounded-full" />
-
-              <Skeleton className="h-6 w-1/4" />
-            </div>
-          </div>
+          <>
+            <div className="h-20 border-b border-dark-lighten"></div>
+            <div className="flex-grow"></div>
+            <InputSection />
+          </>
         ) : !conversation ||
           error ||
           !conversation.users.includes(currentUser?.uid as string) ? (
