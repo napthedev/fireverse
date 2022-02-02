@@ -34,7 +34,6 @@ const ChatView: FC<ChatViewProps> = ({ conversation }) => {
   );
 
   useEffect(() => {
-    console.log("Please scroll");
     scrollBottomRef.current?.scrollIntoView();
 
     setTimeout(() => {

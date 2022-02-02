@@ -11,6 +11,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 import Alert from "../Alert";
 import ClickAwayListener from "../ClickAwayListener";
+import { EMOJI_REPLACEMENT } from "../../shared/constants";
 import { Picker } from "emoji-mart";
 import Spin from "react-cssfx-loading/src/Spin";
 import StickerPicker from "./StickerPicker";
@@ -46,9 +47,7 @@ const InputSection: FC<InputSectionProps> = ({ disabled }) => {
     });
   };
 
-  const handleFormSubmit = (e: FormEvent) => {
-    e.preventDefault();
-
+  const submitMessage = () => {
     if (fileUploading) return;
 
     if (!inputValue.trim()) return;
@@ -136,6 +135,33 @@ const InputSection: FC<InputSectionProps> = ({ disabled }) => {
     setInputValue(splitted.join(""));
   };
 
+  const handleReplaceEmoji = (e: any) => {
+    if (e.key === " " || e.key === "Enter") {
+      if (e.target.selectionStart !== e.target.selectionEnd) return;
+
+      const lastWord = inputValue
+        .slice(0, e.target.selectionStart)
+        .split(" ")
+        .slice(-1)[0];
+
+      if (lastWord.length === 0) return;
+
+      Object.entries(EMOJI_REPLACEMENT).map(([key, value]) => {
+        value.forEach((item) => {
+          if (item === lastWord) {
+            const splitted = inputValue.split("");
+            splitted.splice(
+              e.target.selectionStart - lastWord.length,
+              lastWord.length,
+              key
+            );
+            setInputValue(splitted.join(""));
+          }
+        });
+      });
+    }
+  };
+
   return (
     <>
       <div
@@ -209,58 +235,60 @@ const InputSection: FC<InputSectionProps> = ({ disabled }) => {
           </button>
         </div>
 
-        <form
-          onSubmit={handleFormSubmit}
-          className="flex-grow flex items-center gap-1"
-        >
-          <div className="flex-grow flex items-center relative">
-            <input
-              ref={textInputRef}
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              className="w-full h-9 pl-3 pr-10 bg-dark-lighten outline-none rounded-full"
-              type="text"
-              placeholder="Message..."
-              autoFocus
-            />
-            <button
-              type="button"
-              onClick={() => setIsIconPickerOpened(true)}
-              className="absolute right-2 top-1/2 -translate-y-1/2"
-            >
-              <i className="bx bxs-smile text-primary text-2xl"></i>
-            </button>
+        <div className="flex-grow flex items-center relative">
+          <input
+            ref={textInputRef}
+            value={inputValue}
+            onChange={(e) => {
+              setInputValue(e.target.value);
+            }}
+            onKeyDown={handleReplaceEmoji}
+            onKeyPress={(e) => {
+              if (e.key === "Enter") submitMessage();
+            }}
+            className="w-full h-9 pl-3 pr-10 bg-dark-lighten outline-none rounded-full"
+            type="text"
+            placeholder="Message..."
+            autoFocus
+          />
+          <button
+            type="button"
+            onClick={() => setIsIconPickerOpened(true)}
+            className="absolute right-2 top-1/2 -translate-y-1/2"
+          >
+            <i className="bx bxs-smile text-primary text-2xl"></i>
+          </button>
 
-            {isIconPickerOpened && (
-              <ClickAwayListener
-                onClickAway={() => setIsIconPickerOpened(false)}
-              >
-                {(ref) => (
-                  <div ref={ref} className="absolute bottom-full right-0">
-                    <Picker
-                      set="facebook"
-                      enableFrequentEmojiSort
-                      onSelect={(emoji: any) => addIconToInput(emoji.native)}
-                      theme="dark"
-                      showPreview={false}
-                      showSkinTones={false}
-                      emojiTooltip
-                      defaultSkin={1}
-                      color="#0F8FF3"
-                    />
-                  </div>
-                )}
-              </ClickAwayListener>
-            )}
-          </div>
-          {fileUploading ? (
-            <Spin width="24px" height="24px" color="#0D90F3" />
-          ) : (
-            <button className="flex-shrink-0 text-2xl text-primary flex items-center">
-              <i className="bx bxs-send"></i>
-            </button>
+          {isIconPickerOpened && (
+            <ClickAwayListener onClickAway={() => setIsIconPickerOpened(false)}>
+              {(ref) => (
+                <div ref={ref} className="absolute bottom-full right-0">
+                  <Picker
+                    set="facebook"
+                    enableFrequentEmojiSort
+                    onSelect={(emoji: any) => addIconToInput(emoji.native)}
+                    theme="dark"
+                    showPreview={false}
+                    showSkinTones={false}
+                    emojiTooltip
+                    defaultSkin={1}
+                    color="#0F8FF3"
+                  />
+                </div>
+              )}
+            </ClickAwayListener>
           )}
-        </form>
+        </div>
+        {fileUploading ? (
+          <Spin width="24px" height="24px" color="#0D90F3" />
+        ) : (
+          <button
+            onClick={() => submitMessage()}
+            className="flex-shrink-0 text-2xl text-primary flex items-center"
+          >
+            <i className="bx bxs-send"></i>
+          </button>
+        )}
       </div>
 
       <Alert
