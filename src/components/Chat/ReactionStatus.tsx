@@ -6,7 +6,7 @@ import Spin from "react-cssfx-loading/src/Spin";
 import { useUsersInfo } from "../../hooks/useUsersInfo";
 
 interface ReactionStatusProps {
-  position: "left" | "right";
+  position: "left" | "right" | "left-tab";
   message: MessageItem;
 }
 
@@ -24,7 +24,11 @@ const ReactionStatus: FC<ReactionStatusProps> = ({ message, position }) => {
       <div
         onClick={() => setIsReactionStatusOpened(true)}
         className={`absolute top-full -translate-y-1/2 bg-dark-lighten px-2 rounded-lg py-[1px] text-sm flex items-center gap-[2px] border border-dark cursor-pointer ${
-          position === "right" ? "right-8" : "left-[70px]"
+          position === "right"
+            ? "right-8"
+            : position === "left-tab"
+            ? "left-[70px]"
+            : "left-8"
         }`}
       >
         {Object.entries(

@@ -102,7 +102,7 @@ const RightMessage: FC<RightMessageProps> = ({
             >
               {(ref) => (
                 <ReactionPopup
-                  position="left"
+                  position={"left"}
                   forwardedRef={ref}
                   setIsOpened={setIsSelectReactionOpened}
                   messageId={message.id as string}
@@ -116,7 +116,10 @@ const RightMessage: FC<RightMessageProps> = ({
         </>
       )}
       {Object.keys(message.reactions || {}).length > 0 && (
-        <ReactionStatus message={message} position="left" />
+        <ReactionStatus
+          message={message}
+          position={conversation.users.length > 2 ? "left-tab" : "left"}
+        />
       )}
     </div>
   );
