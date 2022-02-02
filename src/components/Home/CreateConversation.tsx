@@ -53,7 +53,7 @@ const CreateConversation: FC<CreateConversationProps> = ({ setIsOpened }) => {
 
     const querySnapshot = await getDocs(q);
 
-    if (querySnapshot.docs.length === 0) {
+    if (querySnapshot.empty) {
       const created = await addDoc(collection(db, "conversations"), {
         users: sorted,
         group:

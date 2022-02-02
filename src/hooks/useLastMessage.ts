@@ -27,18 +27,24 @@ export const useLastMessage = (conversationId: string) => {
         limitToLast(1)
       ),
       (snapshot) => {
+        if (snapshot.empty) {
+          setData("No message recently");
+          return;
+        }
         const type = snapshot.docs?.[0]?.data()?.type;
         const response =
-          snapshot.docs.length === 0
-            ? "No message recently"
-            : type === "image"
+          type === "image"
             ? "An image"
             : type === "file"
-            ? `File: ${snapshot.docs[0]?.data()?.file?.name}`
+            ? `File: ${
+                snapshot.docs[0]?.data()?.file?.name.split(".").slice(-1)[0]
+              }`
             : type === "sticker"
             ? "A sticker"
             : type === "removed"
             ? "Message removed"
+            : snapshot.docs[0].data().content.length > 20
+            ? `${snapshot.docs[0].data().content.slice(0, 20)}...`
             : snapshot.docs[0].data().content;
 
         const seconds = snapshot.docs[0]?.data()?.createdAt?.seconds;

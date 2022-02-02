@@ -20,7 +20,7 @@ const ChatView: FC<ChatViewProps> = ({ conversation }) => {
 
   const currentUser = useStore((state) => state.currentUser);
 
-  // const containerRef = useRef<HTMLDivElement>(null);
+  const scrollBottomRef = useRef<HTMLDivElement>(null);
 
   const [limitCount, setLimitCount] = useState(10);
 
@@ -33,21 +33,14 @@ const ChatView: FC<ChatViewProps> = ({ conversation }) => {
     )
   );
 
-  // useEffect(() => {
-  //   console.log("Scrolling");
+  useEffect(() => {
+    console.log("Please scroll");
+    scrollBottomRef.current?.scrollIntoView();
 
-  //   if (!containerRef.current) return;
-
-  //   containerRef.current.scrollTop =
-  //     containerRef.current.scrollHeight - containerRef.current.clientHeight;
-
-  //   setTimeout(() => {
-  //     if (!containerRef.current) return;
-
-  //     containerRef.current.scrollTop =
-  //       containerRef.current.scrollHeight - containerRef.current.clientHeight;
-  //   }, 100);
-  // }, [data?.size || 0]);
+    setTimeout(() => {
+      scrollBottomRef.current?.scrollIntoView();
+    }, 100);
+  }, [data?.docs?.slice(-1)?.[0]?.id || ""]);
 
   if (loading)
     return (
@@ -56,7 +49,7 @@ const ChatView: FC<ChatViewProps> = ({ conversation }) => {
       </div>
     );
 
-  if (data?.size === 0)
+  if (data?.empty)
     return (
       <div className="flex-grow">
         <p className="text-center text-gray-400">
@@ -79,7 +72,7 @@ const ChatView: FC<ChatViewProps> = ({ conversation }) => {
       style={{ display: "flex", flexDirection: "column-reverse" }}
       height="calc(100vh - 144px)"
     >
-      <div className="flex flex-col items-stretch gap-3 pt-10 pb-3">
+      <div className="flex flex-col items-stretch gap-3 pt-10 pb-1">
         {data?.docs
           .map((doc) => ({ id: doc.id, ...doc.data() } as MessageItem))
           .map((item, index) => (
@@ -96,6 +89,7 @@ const ChatView: FC<ChatViewProps> = ({ conversation }) => {
               )}
             </Fragment>
           ))}
+        <div ref={scrollBottomRef}></div>
       </div>
     </InfiniteScroll>
   );

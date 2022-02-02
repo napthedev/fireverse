@@ -119,10 +119,9 @@ const InputSection: FC<InputSectionProps> = ({ disabled }) => {
               },
               createdAt: serverTimestamp(),
             }
-          ).then(() => {
-            setFileUploading(false);
-          });
+          );
 
+          setFileUploading(false);
           updateTimestamp();
         });
       })
@@ -219,7 +218,7 @@ const InputSection: FC<InputSectionProps> = ({ disabled }) => {
               ref={textInputRef}
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
-              className="w-full h-9 px-3 bg-dark-lighten outline-none rounded-full"
+              className="w-full h-9 pl-3 pr-10 bg-dark-lighten outline-none rounded-full"
               type="text"
               placeholder="Message..."
               autoFocus

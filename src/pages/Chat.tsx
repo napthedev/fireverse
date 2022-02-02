@@ -4,7 +4,6 @@ import { ConversationInfo } from "../shared/types";
 import { FC } from "react";
 import InputSection from "../components/Chat/InputSection";
 import SideBar from "../components/Home/SideBar";
-import Skeleton from "../components/Skeleton";
 import { db } from "../shared/firebase";
 import { doc } from "firebase/firestore";
 import { useDocumentQuery } from "../hooks/useDocumentQuery";

@@ -43,6 +43,7 @@ const ReactionPopup: FC<ReactionPopupProps> = ({
     >
       {Object.entries(REACTIONS_UI).map(([key, value], index) => (
         <div
+          key={key}
           className={`${
             index + 1 === currentReaction
               ? "relative after:absolute after:left-1/2 after:top-full after:-translate-x-1/2 after:w-[5px] after:h-[5px] after:rounded-full after:bg-primary"

@@ -108,7 +108,7 @@ const SideBar: FC = () => {
               </div>
             ))}
           </div>
-        ) : data?.docs.length === 0 ? (
+        ) : data?.empty ? (
           <div className="flex-grow flex flex-col justify-center items-center">
             <p className="text-center">No conversation found</p>
             <button
