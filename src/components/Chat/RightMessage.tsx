@@ -28,6 +28,7 @@ const RightMessage: FC<RightMessageProps> = ({ message }) => {
         type: "removed",
         file: null,
         content: "",
+        reactions: [],
       }
     );
   };
