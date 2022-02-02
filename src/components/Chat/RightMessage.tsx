@@ -1,5 +1,6 @@
 import { FC, useState } from "react";
 import { doc, updateDoc } from "firebase/firestore";
+import { formatDate, formatFileSize } from "../../shared/utils";
 
 import ClickAwayListener from "../ClickAwayListener";
 import { MessageItem } from "../../shared/types";
@@ -7,7 +8,6 @@ import ReactionPopup from "./ReactionPopup";
 import ReactionStatus from "./ReactionStatus";
 import SpriteRenderer from "../SpriteRenderer";
 import { db } from "../../shared/firebase";
-import { formatFileSize } from "../../shared/utils";
 import { useParams } from "react-router-dom";
 import { useStore } from "../../store";
 
@@ -34,6 +34,10 @@ const RightMessage: FC<RightMessageProps> = ({ message }) => {
     );
   };
 
+  const formattedDate = formatDate(
+    message.createdAt.seconds ? message.createdAt.seconds * 1000 : Date.now()
+  );
+
   return (
     <div
       className={`flex flex-row-reverse items-center px-8 gap-2 group relative ${
@@ -41,13 +45,24 @@ const RightMessage: FC<RightMessageProps> = ({ message }) => {
       }`}
     >
       {message.type === "text" ? (
-        <div className="bg-primary text-white p-2 rounded-lg relative after:absolute after:left-full after:bottom-[6px] after:border-8 after:border-primary after:border-t-transparent after:border-r-transparent">
+        <div
+          title={formattedDate}
+          className="bg-primary text-white p-2 rounded-lg relative after:absolute after:left-full after:bottom-[6px] after:border-8 after:border-primary after:border-t-transparent after:border-r-transparent"
+        >
           {message.content}
         </div>
       ) : message.type === "image" ? (
-        <img className="max-w-[60%]" src={message.content} alt="" />
+        <img
+          title={formattedDate}
+          className="max-w-[60%]"
+          src={message.content}
+          alt=""
+        />
       ) : message.type === "file" ? (
-        <div className="bg-dark-lighten flex items-center gap-2 rounded-lg overflow-hidden py-3 px-5">
+        <div
+          title={formattedDate}
+          className="bg-dark-lighten flex items-center gap-2 rounded-lg overflow-hidden py-3 px-5"
+        >
           <div>
             <p className="max-w-[100px] overflow-hidden text-ellipsis whitespace-nowrap">
               {message.file?.name}
@@ -68,9 +83,16 @@ const RightMessage: FC<RightMessageProps> = ({ message }) => {
           </a>
         </div>
       ) : message.type === "sticker" ? (
-        <SpriteRenderer src={message.content} size={130} />
+        <SpriteRenderer
+          title={formattedDate}
+          src={message.content}
+          size={130}
+        />
       ) : (
-        <div className="p-3 border border-dark-lighten rounded-lg text-gray-400">
+        <div
+          title={formattedDate}
+          className="p-3 border border-dark-lighten rounded-lg text-gray-400"
+        >
           Message has been removed
         </div>
       )}

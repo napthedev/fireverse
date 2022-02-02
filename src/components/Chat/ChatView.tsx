@@ -31,10 +31,17 @@ const ChatView: FC<ChatViewProps> = ({ conversation }) => {
   );
 
   useEffect(() => {
-    if (containerRef.current) {
+    if (!containerRef.current) return;
+
+    containerRef.current.scrollTop =
+      containerRef.current.scrollHeight - containerRef.current.clientHeight;
+
+    setTimeout(() => {
+      if (!containerRef.current) return;
+
       containerRef.current.scrollTop =
         containerRef.current.scrollHeight - containerRef.current.clientHeight;
-    }
+    }, 100);
   }, [data?.size || 0]);
 
   return (

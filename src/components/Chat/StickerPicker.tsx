@@ -43,7 +43,7 @@ const StickerPicker: FC<StickerPickerOpened> = ({ setIsOpened, onSelect }) => {
       {(ref) => (
         <div
           ref={ref}
-          className="absolute -left-16 bottom-full bg-dark border-dark-lighten border-2 shadow-2xl rounded-lg w-96 h-96"
+          className="absolute -left-16 bottom-full bg-[#222222] border-dark-lighten border-2 shadow-2xl rounded-lg w-96 h-96"
         >
           {loading || error ? (
             <div className="w-full h-full flex items-center justify-center">
