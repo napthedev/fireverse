@@ -27,7 +27,6 @@ export const useCollectionQuery: (
     const unsubscribe = onSnapshot(
       collection,
       (snapshot) => {
-        if (snapshot.metadata.fromCache) return;
         setData(snapshot);
         setLoading(false);
         setError(false);
