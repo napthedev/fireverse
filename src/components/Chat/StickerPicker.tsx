@@ -107,7 +107,7 @@ const StickerPicker: FC<StickerPickerOpened> = ({ setIsOpened, onSelect }) => {
                     }
                     className="w-9 h-9 flex items-center"
                   >
-                    <i className="bx bx-time text-2xl"></i>
+                    <i className="bx bx-time text-[26px] leading-[26px]"></i>
                   </button>
                 )}
                 {data?.map((collection) => (

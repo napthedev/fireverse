@@ -1,6 +1,4 @@
 import {
-  DocumentData,
-  QuerySnapshot,
   collection,
   limitToLast,
   onSnapshot,
@@ -10,11 +8,12 @@ import {
 import { useEffect, useState } from "react";
 
 import { db } from "../shared/firebase";
+import { formatDate } from "../shared/utils";
 
 let cache: { [key: string]: any } = {};
 
 export const useLastMessage = (conversationId: string) => {
-  const [data, setData] = useState<QuerySnapshot<DocumentData> | null>(
+  const [data, setData] = useState<string | null>(
     cache[conversationId] || null
   );
   const [loading, setLoading] = useState(!data);
@@ -41,8 +40,12 @@ export const useLastMessage = (conversationId: string) => {
             : type === "removed"
             ? "Message removed"
             : snapshot.docs[0].data().content;
-        setData(response);
-        cache[conversationId] = response;
+
+        const seconds = snapshot.docs[0]?.data()?.createdAt?.seconds;
+        const formattedDate = formatDate(seconds ? seconds * 1000 : Date.now());
+        const result = `${response} • ${formattedDate}`;
+        setData(result);
+        cache[conversationId] = result;
         setLoading(false);
         setError(false);
       },

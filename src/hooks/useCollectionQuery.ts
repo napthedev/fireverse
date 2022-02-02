@@ -24,13 +24,10 @@ export const useCollectionQuery: (
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    setData(cache[key] || null);
-    setLoading(!(cache[key] || null));
-    setError(false);
-
     const unsubscribe = onSnapshot(
       collection,
       (snapshot) => {
+        if (snapshot.metadata.fromCache) return;
         setData(snapshot);
         setLoading(false);
         setError(false);

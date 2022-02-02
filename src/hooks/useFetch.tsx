@@ -11,11 +11,6 @@ export function useFetch<T>(
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    const existingData = cache[key] || null;
-    setData(existingData);
-    setLoading(!existingData);
-    setError(false);
-
     query()
       .then((res) => {
         cache[key] = res;

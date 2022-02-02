@@ -32,7 +32,7 @@ const Chat: FC = () => {
           <>
             <div className="h-20 border-b border-dark-lighten"></div>
             <div className="flex-grow"></div>
-            <InputSection />
+            <InputSection disabled />
           </>
         ) : !conversation ||
           error ||
@@ -44,8 +44,8 @@ const Chat: FC = () => {
         ) : (
           <>
             <ChatHeader conversation={conversation} />
-            <ChatView conversation={conversation} />
-            <InputSection />
+            <ChatView key={id} conversation={conversation} />
+            <InputSection disabled={false} />
           </>
         )}
       </div>

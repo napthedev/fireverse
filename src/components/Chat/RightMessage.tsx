@@ -35,7 +35,7 @@ const RightMessage: FC<RightMessageProps> = ({ message }) => {
   };
 
   const formattedDate = formatDate(
-    message.createdAt.seconds ? message.createdAt.seconds * 1000 : Date.now()
+    message.createdAt?.seconds ? message.createdAt?.seconds * 1000 : Date.now()
   );
 
   return (

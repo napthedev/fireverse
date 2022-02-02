@@ -18,7 +18,11 @@ import { formatFileName } from "../../shared/utils";
 import { useParams } from "react-router-dom";
 import { useStore } from "../../store";
 
-const InputSection: FC = () => {
+interface InputSectionProps {
+  disabled: boolean;
+}
+
+const InputSection: FC<InputSectionProps> = ({ disabled }) => {
   const [inputValue, setInputValue] = useState("");
 
   const [fileUploading, setFileUploading] = useState(false);
@@ -135,7 +139,11 @@ const InputSection: FC = () => {
 
   return (
     <>
-      <div className="flex items-stretch h-16 px-4 gap-1 border-t border-dark-lighten">
+      <div
+        className={`flex items-stretch h-16 px-4 gap-1 border-t border-dark-lighten ${
+          disabled ? "pointer-events-none select-none" : ""
+        }`}
+      >
         <button
           onClick={() => imageInputRef.current?.click()}
           className="flex-shrink-0 text-2xl text-primary flex items-center"

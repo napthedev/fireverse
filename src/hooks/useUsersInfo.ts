@@ -18,13 +18,6 @@ export const useUsersInfo = (userIds: string[]) => {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    const newData = userIds.every((id) => cache[id])
-      ? userIds.map((id) => cache[id])
-      : null;
-    setData(newData);
-    setLoading(!newData);
-    setError(false);
-
     try {
       (async () => {
         const response = await Promise.all(

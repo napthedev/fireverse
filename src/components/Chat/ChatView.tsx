@@ -1,7 +1,8 @@
 import { ConversationInfo, MessageItem } from "../../shared/types";
-import { FC, Fragment, useEffect, useRef } from "react";
+import { FC, Fragment, useEffect, useRef, useState } from "react";
 import { collection, limitToLast, orderBy, query } from "firebase/firestore";
 
+import InfiniteScroll from "react-infinite-scroll-component";
 import LeftMessage from "./LeftMessage";
 import RightMessage from "./RightMessage";
 import Spin from "react-cssfx-loading/src/Spin";
@@ -19,66 +20,84 @@ const ChatView: FC<ChatViewProps> = ({ conversation }) => {
 
   const currentUser = useStore((state) => state.currentUser);
 
-  const containerRef = useRef<HTMLDivElement>(null);
+  // const containerRef = useRef<HTMLDivElement>(null);
+
+  const [limitCount, setLimitCount] = useState(10);
 
   const { data, loading, error } = useCollectionQuery(
-    `conversation-data-${conversationId}`,
+    `conversation-data-${conversationId}-${limitCount}`,
     query(
       collection(db, "conversations", conversationId as string, "messages"),
       orderBy("createdAt"),
-      limitToLast(20)
+      limitToLast(limitCount)
     )
   );
 
-  useEffect(() => {
-    if (!containerRef.current) return;
+  // useEffect(() => {
+  //   console.log("Scrolling");
 
-    containerRef.current.scrollTop =
-      containerRef.current.scrollHeight - containerRef.current.clientHeight;
+  //   if (!containerRef.current) return;
 
-    setTimeout(() => {
-      if (!containerRef.current) return;
+  //   containerRef.current.scrollTop =
+  //     containerRef.current.scrollHeight - containerRef.current.clientHeight;
 
-      containerRef.current.scrollTop =
-        containerRef.current.scrollHeight - containerRef.current.clientHeight;
-    }, 100);
-  }, [data?.size || 0]);
+  //   setTimeout(() => {
+  //     if (!containerRef.current) return;
+
+  //     containerRef.current.scrollTop =
+  //       containerRef.current.scrollHeight - containerRef.current.clientHeight;
+  //   }, 100);
+  // }, [data?.size || 0]);
+
+  if (loading)
+    return (
+      <div className="flex-grow flex justify-center items-center">
+        <Spin />
+      </div>
+    );
+
+  if (data?.size === 0)
+    return (
+      <div className="flex-grow">
+        <p className="text-center text-gray-400">
+          No message recently. Start chatting now.
+        </p>
+      </div>
+    );
 
   return (
-    <div
-      ref={containerRef}
-      className="flex flex-col items-stretch gap-3 pt-10 pb-3 h-[calc(100vh-144px)] overflow-x-hidden overflow-y-auto"
-    >
-      {loading ? (
-        <div className="w-full h-full flex justify-center items-center">
+    <InfiniteScroll
+      dataLength={data?.size as number}
+      next={() => setLimitCount((prev) => prev + 10)}
+      inverse
+      hasMore={(data?.size as number) >= limitCount}
+      loader={
+        <div className="flex justify-center py-3">
           <Spin />
         </div>
-      ) : (
-        <>
-          {data?.docs.length === 0 && (
-            <p className="text-center text-gray-400">
-              No message recently. Start chatting now.
-            </p>
-          )}
-          {data?.docs
-            .map((doc) => ({ id: doc.id, ...doc.data() } as MessageItem))
-            .map((item, index) => (
-              <Fragment key={item.id}>
-                {item.sender === currentUser?.uid ? (
-                  <RightMessage message={item} />
-                ) : (
-                  <LeftMessage
-                    message={item}
-                    index={index}
-                    docs={data?.docs}
-                    conversation={conversation}
-                  />
-                )}
-              </Fragment>
-            ))}
-        </>
-      )}
-    </div>
+      }
+      style={{ display: "flex", flexDirection: "column-reverse" }}
+      height="calc(100vh - 144px)"
+    >
+      <div className="flex flex-col items-stretch gap-3 pt-10 pb-3">
+        {data?.docs
+          .map((doc) => ({ id: doc.id, ...doc.data() } as MessageItem))
+          .map((item, index) => (
+            <Fragment key={item.id}>
+              {item.sender === currentUser?.uid ? (
+                <RightMessage message={item} />
+              ) : (
+                <LeftMessage
+                  message={item}
+                  index={index}
+                  docs={data?.docs}
+                  conversation={conversation}
+                />
+              )}
+            </Fragment>
+          ))}
+      </div>
+    </InfiniteScroll>
   );
 };
 
