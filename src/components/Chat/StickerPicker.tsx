@@ -1,6 +1,7 @@
 import { FC, useState } from "react";
 
 import ClickAwayListener from "../ClickAwayListener";
+import { InView } from "react-intersection-observer";
 import { STICKERS_URL } from "../../shared/constants";
 import Spin from "react-cssfx-loading/src/Spin";
 import SpriteRenderer from "../SpriteRenderer";
@@ -54,12 +55,13 @@ const StickerPicker: FC<StickerPickerOpened> = ({ setIsOpened, onSelect }) => {
               <div className="flex-grow overflow-y-auto p-3 pt-1">
                 {recentStickers.length > 0 && (
                   <>
-                    <h1 className="mt-2" id={`sticker-recent`}>
+                    <h1 className="mt-2" id="sticker-recent">
                       Recent stickers
                     </h1>
                     <div className="w-full grid grid-cols-5 justify-between">
                       {recentStickers.map((url) => (
                         <SpriteRenderer
+                          size={60}
                           onClick={() => {
                             onSelect(url);
                             addRecentSticker(url);
@@ -81,16 +83,25 @@ const StickerPicker: FC<StickerPickerOpened> = ({ setIsOpened, onSelect }) => {
                     </h1>
                     <div className="w-full grid grid-cols-5 justify-between">
                       {collection.stickers.map((sticker) => (
-                        <SpriteRenderer
-                          onClick={() => {
-                            onSelect(sticker.spriteURL);
-                            addRecentSticker(sticker.spriteURL);
-                            setIsOpened(false);
-                          }}
-                          className="hover:bg-dark-lighten cursor-pointer"
-                          src={sticker.spriteURL}
-                          runOnHover
-                        />
+                        <InView key={sticker.spriteURL} rootMargin="-100px">
+                          {({ inView, ref }) => (
+                            <div className="w-[60px] h-[60px]" ref={ref}>
+                              {inView && (
+                                <SpriteRenderer
+                                  size={60}
+                                  onClick={() => {
+                                    onSelect(sticker.spriteURL);
+                                    addRecentSticker(sticker.spriteURL);
+                                    setIsOpened(false);
+                                  }}
+                                  className="hover:bg-dark-lighten cursor-pointer"
+                                  src={sticker.spriteURL}
+                                  runOnHover
+                                />
+                              )}
+                            </div>
+                          )}
+                        </InView>
                       ))}
                     </div>
                   </>

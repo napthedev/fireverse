@@ -2,14 +2,14 @@ import { FC, HTMLProps, useEffect, useRef, useState } from "react";
 
 interface SpriteRendererProps {
   src: string;
-  size?: number;
+  size: number;
   runOnHover?: boolean;
   delay?: number;
 }
 
 const SpriteRenderer: FC<HTMLProps<HTMLDivElement> & SpriteRendererProps> = ({
   src,
-  size = 60,
+  size,
   runOnHover = false,
   delay = 100,
   ...others
