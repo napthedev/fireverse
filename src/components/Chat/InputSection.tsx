@@ -10,6 +10,8 @@ import { db, storage } from "../../shared/firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 import Alert from "../Alert";
+import ClickAwayListener from "../ClickAwayListener";
+import { Picker } from "emoji-mart";
 import Spin from "react-cssfx-loading/src/Spin";
 import StickerPicker from "./StickerPicker";
 import { formatFileName } from "../../shared/utils";
@@ -22,6 +24,7 @@ const InputSection: FC = () => {
   const [fileUploading, setFileUploading] = useState(false);
 
   const [isStickerPickerOpened, setIsStickerPickerOpened] = useState(false);
+  const [isIconPickerOpened, setIsIconPickerOpened] = useState(false);
 
   const [isAlertOpened, setIsAlertOpened] = useState(false);
   const [alertText, setAlertText] = useState("");
@@ -29,6 +32,7 @@ const InputSection: FC = () => {
   const { id: conversationId } = useParams();
   const currentUser = useStore((state) => state.currentUser);
 
+  const textInputRef = useRef<HTMLInputElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -121,6 +125,14 @@ const InputSection: FC = () => {
       .catch(() => setFileUploading(false));
   };
 
+  const addIconToInput = (value: string) => {
+    const start = textInputRef.current?.selectionStart as number;
+    const end = textInputRef.current?.selectionEnd as number;
+    const splitted = inputValue.split("");
+    splitted.splice(start, end - start, value);
+    setInputValue(splitted.join(""));
+  };
+
   return (
     <>
       <div className="flex items-stretch h-16 px-4 gap-1 border-t border-dark-lighten">
@@ -194,8 +206,9 @@ const InputSection: FC = () => {
           onSubmit={handleFormSubmit}
           className="flex-grow flex items-center gap-1"
         >
-          <div className="flex-grow flex items-center">
+          <div className="flex-grow flex items-center relative">
             <input
+              ref={textInputRef}
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               className="w-full h-9 px-3 bg-dark-lighten outline-none rounded-full"
@@ -203,6 +216,35 @@ const InputSection: FC = () => {
               placeholder="Message..."
               autoFocus
             />
+            <button
+              type="button"
+              onClick={() => setIsIconPickerOpened(true)}
+              className="absolute right-2 top-1/2 -translate-y-1/2"
+            >
+              <i className="bx bxs-smile text-primary text-2xl"></i>
+            </button>
+
+            {isIconPickerOpened && (
+              <ClickAwayListener
+                onClickAway={() => setIsIconPickerOpened(false)}
+              >
+                {(ref) => (
+                  <div ref={ref} className="absolute bottom-full right-0">
+                    <Picker
+                      set="facebook"
+                      enableFrequentEmojiSort
+                      onSelect={(emoji: any) => addIconToInput(emoji.native)}
+                      theme="dark"
+                      showPreview={false}
+                      showSkinTones={false}
+                      emojiTooltip
+                      defaultSkin={1}
+                      color="#0F8FF3"
+                    />
+                  </div>
+                )}
+              </ClickAwayListener>
+            )}
           </div>
           {fileUploading ? (
             <Spin width="24px" height="24px" color="#0D90F3" />

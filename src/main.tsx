@@ -1,4 +1,5 @@
 import "./styles/index.css";
+import "emoji-mart/css/emoji-mart.css";
 
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
