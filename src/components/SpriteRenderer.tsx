@@ -16,7 +16,6 @@ const SpriteRenderer: FC<HTMLProps<HTMLDivElement> & SpriteRendererProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const [backgroundPosition, setBackgroundPosition] = useState("");
   const [loaded, setLoaded] = useState(false);
   const intervalId = useRef<any>(null);
 
@@ -40,9 +39,10 @@ const SpriteRenderer: FC<HTMLProps<HTMLDivElement> & SpriteRendererProps> = ({
             intervalId.current = setInterval(() => {
               if (!containerRef.current) clearInterval(intervalId.current);
 
-              setBackgroundPosition(
-                `${Math.round(-((count % stepCount) + 1) * size)}px 50%`
-              );
+              containerRef.current &&
+                (containerRef.current.style.backgroundPosition = `${Math.round(
+                  -((count % stepCount) + 1) * size
+                )}px 50%`);
 
               count++;
             }, delay);
@@ -53,15 +53,17 @@ const SpriteRenderer: FC<HTMLProps<HTMLDivElement> & SpriteRendererProps> = ({
 
             count = 0;
 
-            setBackgroundPosition(`0px 50%`);
+            containerRef.current &&
+              (containerRef.current.style.backgroundPosition = "0px 50%");
           });
         } else {
           intervalId.current = setInterval(() => {
             if (!containerRef.current) clearInterval(intervalId.current);
 
-            setBackgroundPosition(
-              `${Math.round(-((count % stepCount) + 1) * size)}px 50%`
-            );
+            containerRef.current &&
+              (containerRef.current.style.backgroundPosition = `${Math.round(
+                -((count % stepCount) + 1) * size
+              )}px 50%`);
 
             count++;
           }, delay);
@@ -81,7 +83,6 @@ const SpriteRenderer: FC<HTMLProps<HTMLDivElement> & SpriteRendererProps> = ({
       style={{
         width: size,
         height: size,
-        backgroundPosition,
         opacity: loaded ? 1 : 0,
         backgroundImage: `url(${src})`,
         backgroundSize: "cover",
