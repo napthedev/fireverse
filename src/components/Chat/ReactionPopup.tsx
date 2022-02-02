@@ -55,6 +55,7 @@ const ReactionPopup: FC<ReactionPopupProps> = ({
               else updateReaction(index + 1);
               setIsOpened(false);
             }}
+            title={key}
             className={`w-7 h-7 cursor-pointer hover:scale-[115%] origin-bottom transition duration-300`}
             src={value.gif}
             alt=""

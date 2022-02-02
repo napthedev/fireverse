@@ -5,6 +5,7 @@ import AvatarFromId from "./AvatarFromId";
 import ClickAwayListener from "../ClickAwayListener";
 import ReactionPopup from "./ReactionPopup";
 import ReactionStatus from "./ReactionStatus";
+import SpriteRenderer from "../SpriteRenderer";
 import { formatFileSize } from "../../shared/utils";
 import { useStore } from "../../store";
 
@@ -30,14 +31,16 @@ const RightMessage: FC<RightMessageProps> = ({
         Object.keys(message.reactions || {}).length > 0 ? "mb-2" : ""
       }`}
     >
-      {conversation.users.length > 2 &&
-        docs[index - 1]?.data()?.sender !== message.sender && (
-          <AvatarFromId uid={message.sender} />
-        )}
-      {conversation.users.length > 2 &&
-        docs[index - 1]?.data()?.sender === message.sender && (
-          <div className="w-[30px] h-[30px]"></div>
-        )}
+      {conversation.users.length > 2 && (
+        <div className="h-full py-1">
+          <div className="w-[30px] h-[30px]">
+            {docs[index - 1]?.data()?.sender !== message.sender && (
+              <AvatarFromId uid={message.sender} />
+            )}
+          </div>
+        </div>
+      )}
+
       {message.type === "text" ? (
         <div
           className={`bg-dark-lighten text-white p-2 rounded-lg ${
@@ -51,7 +54,7 @@ const RightMessage: FC<RightMessageProps> = ({
       ) : message.type === "image" ? (
         <img className="max-w-[60%]" src={message.content} alt="" />
       ) : message.type === "file" ? (
-        <div className="bg-dark-lighten flex messages-center gap-2 rounded-lg overflow-hidden py-3 px-5">
+        <div className="bg-dark-lighten flex items-center gap-2 rounded-lg overflow-hidden py-3 px-5">
           <div>
             <p className="max-w-[100px] overflow-hidden text-ellipsis whitespace-nowrap">
               {message.file?.name}
@@ -71,6 +74,8 @@ const RightMessage: FC<RightMessageProps> = ({
             <i className="bx bxs-download text-2xl"></i>
           </a>
         </div>
+      ) : message.type === "sticker" ? (
+        <SpriteRenderer src={message.content} size={130} />
       ) : (
         <div className="p-3 border border-dark-lighten rounded-lg text-gray-400">
           Message has been removed

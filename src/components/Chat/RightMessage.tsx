@@ -5,6 +5,7 @@ import ClickAwayListener from "../ClickAwayListener";
 import { MessageItem } from "../../shared/types";
 import ReactionPopup from "./ReactionPopup";
 import ReactionStatus from "./ReactionStatus";
+import SpriteRenderer from "../SpriteRenderer";
 import { db } from "../../shared/firebase";
 import { formatFileSize } from "../../shared/utils";
 import { useParams } from "react-router-dom";
@@ -66,6 +67,8 @@ const RightMessage: FC<RightMessageProps> = ({ message }) => {
             <i className="bx bxs-download text-2xl"></i>
           </a>
         </div>
+      ) : message.type === "sticker" ? (
+        <SpriteRenderer src={message.content} size={130} />
       ) : (
         <div className="p-3 border border-dark-lighten rounded-lg text-gray-400">
           Message has been removed

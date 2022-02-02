@@ -27,8 +27,21 @@ export interface MessageItem {
     seconds: number;
     nanoseconds: number;
   };
-  type: "text" | "image" | "file" | "removed";
+  type: "text" | "image" | "file" | "sticker" | "removed";
   reactions: {
     [key: string]: number;
   };
 }
+
+export interface StickerCollection {
+  name: string;
+  thumbnail: string;
+  icon: string;
+  id: string;
+  stickers: {
+    id: string;
+    spriteURL: string;
+  }[];
+}
+
+export type StickerCollections = StickerCollection[];

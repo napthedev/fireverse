@@ -11,6 +11,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 import Alert from "../Alert";
 import Spin from "react-cssfx-loading/src/Spin";
+import StickerPicker from "./StickerPicker";
 import { formatFileName } from "../../shared/utils";
 import { useParams } from "react-router-dom";
 import { useStore } from "../../store";
@@ -19,6 +20,8 @@ const InputSection: FC = () => {
   const [inputValue, setInputValue] = useState("");
 
   const [fileUploading, setFileUploading] = useState(false);
+
+  const [isStickerPickerOpened, setIsStickerPickerOpened] = useState(false);
 
   const [isAlertOpened, setIsAlertOpened] = useState(false);
   const [alertText, setAlertText] = useState("");
@@ -50,6 +53,20 @@ const InputSection: FC = () => {
         sender: currentUser?.uid,
         content: inputValue.trim(),
         type: "text",
+        createdAt: serverTimestamp(),
+      }
+    );
+
+    updateTimestamp();
+  };
+
+  const sendSticker = (url: string) => {
+    addDoc(
+      collection(db, "conversations", conversationId as string, "messages"),
+      {
+        sender: currentUser?.uid,
+        content: url,
+        type: "sticker",
         createdAt: serverTimestamp(),
       }
     );
@@ -134,17 +151,28 @@ const InputSection: FC = () => {
           type="file"
           onChange={handleFileInputChange}
         />
-        <button className="flex-shrink-0 flex items-center">
-          <svg
-            className="w-[26px] h-[22px] object-contain text-primary"
-            version="1.1"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 512 512"
-            fill="currentColor"
+        <div className="flex-shrink-0 flex items-center relative">
+          {isStickerPickerOpened && (
+            <StickerPicker
+              setIsOpened={setIsStickerPickerOpened}
+              onSelect={sendSticker}
+            />
+          )}
+
+          <button
+            onClick={() => setIsStickerPickerOpened(true)}
+            className="flex items-center"
           >
-            <g>
-              <path
-                d="M414.773,44.763H97.227C43.616,44.763,0,88.38,0,141.992v228.016c0,53.612,43.616,97.229,97.227,97.229h317.545
+            <svg
+              className="w-[26px] h-[22px] object-contain text-primary"
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 512 512"
+              fill="currentColor"
+            >
+              <g>
+                <path
+                  d="M414.773,44.763H97.227C43.616,44.763,0,88.38,0,141.992v228.016c0,53.612,43.616,97.229,97.227,97.229h317.545
 			c53.612,0,97.227-43.617,97.227-97.229V141.992C512,88.38,468.384,44.763,414.773,44.763z M214.73,325.581
 			c-16.078,19.633-37.726,30.445-60.958,30.445c-23.232,0-44.88-10.812-60.958-30.445c-15.335-18.725-23.78-43.437-23.78-69.58
 			c0-26.144,8.446-50.855,23.78-69.58c16.078-19.633,37.726-30.446,60.958-30.446c24.375,0,47.563,12.336,63.614,33.842
@@ -156,10 +184,12 @@ const InputSection: FC = () => {
 			 M427.356,220.45c8.62,0,15.609,6.989,15.609,15.609c0,8.62-6.989,15.609-15.609,15.609h-61.661v88.747
 			c0,8.621-6.989,15.609-15.609,15.609c-8.62,0-15.609-6.989-15.609-15.609V171.583c0-8.621,6.989-15.609,15.609-15.609h77.27
 			c8.62,0,15.609,6.989,15.609,15.609c0,8.62-6.989,15.609-15.609,15.609h-61.661v33.257H427.356z"
-              />
-            </g>
-          </svg>
-        </button>
+                />
+              </g>
+            </svg>
+          </button>
+        </div>
+
         <form
           onSubmit={handleFormSubmit}
           className="flex-grow flex items-center gap-1"

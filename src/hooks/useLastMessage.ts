@@ -36,6 +36,8 @@ export const useLastMessage = (conversationId: string) => {
             ? "An image"
             : type === "file"
             ? `File: ${snapshot.docs[0]?.data()?.file?.name}`
+            : type === "sticker"
+            ? "A sticker"
             : type === "removed"
             ? "Message removed"
             : snapshot.docs[0].data().content;
