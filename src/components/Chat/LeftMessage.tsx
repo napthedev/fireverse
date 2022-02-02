@@ -4,6 +4,7 @@ import { formatDate, formatFileSize } from "../../shared/utils";
 
 import AvatarFromId from "./AvatarFromId";
 import ClickAwayListener from "../ClickAwayListener";
+import { EMOJI_REGEX } from "../../shared/constants";
 import ReactionPopup from "./ReactionPopup";
 import ReactionStatus from "./ReactionStatus";
 import SpriteRenderer from "../SpriteRenderer";
@@ -46,16 +47,24 @@ const RightMessage: FC<RightMessageProps> = ({
       )}
 
       {message.type === "text" ? (
-        <div
-          title={formattedDate}
-          className={`bg-dark-lighten text-white p-2 rounded-lg ${
-            conversation.users.length === 2
-              ? "relative after:absolute after:right-full after:bottom-[6px] after:border-8 after:border-dark-lighten after:border-t-transparent after:border-l-transparent"
-              : ""
-          }`}
-        >
-          {message.content}
-        </div>
+        <>
+          {EMOJI_REGEX.test(message.content) ? (
+            <div title={formattedDate} className="text-4xl">
+              {message.content}
+            </div>
+          ) : (
+            <div
+              title={formattedDate}
+              className={`bg-dark-lighten text-white p-2 rounded-lg ${
+                conversation.users.length === 2
+                  ? "relative after:absolute after:right-full after:bottom-[6px] after:border-8 after:border-dark-lighten after:border-t-transparent after:border-l-transparent"
+                  : ""
+              }`}
+            >
+              {message.content}
+            </div>
+          )}
+        </>
       ) : message.type === "image" ? (
         <img
           title={formattedDate}

@@ -3,6 +3,7 @@ import { doc, updateDoc } from "firebase/firestore";
 import { formatDate, formatFileSize } from "../../shared/utils";
 
 import ClickAwayListener from "../ClickAwayListener";
+import { EMOJI_REGEX } from "../../shared/constants";
 import { MessageItem } from "../../shared/types";
 import ReactionPopup from "./ReactionPopup";
 import ReactionStatus from "./ReactionStatus";
@@ -45,12 +46,20 @@ const RightMessage: FC<RightMessageProps> = ({ message }) => {
       }`}
     >
       {message.type === "text" ? (
-        <div
-          title={formattedDate}
-          className="bg-primary text-white p-2 rounded-lg relative after:absolute after:left-full after:bottom-[6px] after:border-8 after:border-primary after:border-t-transparent after:border-r-transparent"
-        >
-          {message.content}
-        </div>
+        <>
+          {EMOJI_REGEX.test(message.content) ? (
+            <div title={formattedDate} className="text-4xl">
+              {message.content}
+            </div>
+          ) : (
+            <div
+              title={formattedDate}
+              className={`bg-primary text-white p-2 rounded-lg relative after:absolute after:left-full after:bottom-[6px] after:border-8 after:border-primary after:border-t-transparent after:border-r-transparent`}
+            >
+              {message.content}
+            </div>
+          )}
+        </>
       ) : message.type === "image" ? (
         <img
           title={formattedDate}

@@ -68,3 +68,5 @@ export const EMOJI_REPLACEMENT = {
   "😂": [":')"],
   "🤑": ["$-)"],
 };
+
+export const EMOJI_REGEX = /^\p{Extended_Pictographic}$/u;
