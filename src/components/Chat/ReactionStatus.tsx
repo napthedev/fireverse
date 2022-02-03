@@ -23,7 +23,7 @@ const ReactionStatus: FC<ReactionStatusProps> = ({ message, position }) => {
     <>
       <div
         onClick={() => setIsReactionStatusOpened(true)}
-        className={`absolute top-full -translate-y-1/2 bg-dark-lighten px-2 rounded-lg py-[1px] text-sm flex items-center gap-[2px] border border-dark cursor-pointer ${
+        className={`absolute top-full -translate-y-1/2 bg-dark-lighten px-2 rounded-lg text-sm flex items-center gap-[2px] border border-dark cursor-pointer ${
           position === "right"
             ? "right-8"
             : position === "left-tab"

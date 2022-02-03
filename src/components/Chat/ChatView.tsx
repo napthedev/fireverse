@@ -21,10 +21,17 @@ import { useStore } from "../../store";
 
 interface ChatViewProps {
   conversation: ConversationInfo;
-  isFilePreviewOpened: boolean;
+  inputSectionOffset: number;
+  replyInfo: any;
+  setReplyInfo: (value: any) => void;
 }
 
-const ChatView: FC<ChatViewProps> = ({ conversation, isFilePreviewOpened }) => {
+const ChatView: FC<ChatViewProps> = ({
+  conversation,
+  inputSectionOffset,
+  replyInfo,
+  setReplyInfo,
+}) => {
   const { id: conversationId } = useParams();
 
   const currentUser = useStore((state) => state.currentUser);
@@ -119,9 +126,7 @@ const ChatView: FC<ChatViewProps> = ({ conversation, isFilePreviewOpened }) => {
         </div>
       }
       style={{ display: "flex", flexDirection: "column-reverse" }}
-      height={
-        isFilePreviewOpened ? "calc(100vh - 272px)" : "calc(100vh - 144px)"
-      }
+      height={`calc(100vh - ${144 + inputSectionOffset}px)`}
     >
       <div className="flex flex-col items-stretch gap-3 pt-10 pb-1">
         {data?.docs
@@ -129,9 +134,15 @@ const ChatView: FC<ChatViewProps> = ({ conversation, isFilePreviewOpened }) => {
           .map((item, index) => (
             <Fragment key={item.id}>
               {item.sender === currentUser?.uid ? (
-                <RightMessage message={item} />
+                <RightMessage
+                  replyInfo={replyInfo}
+                  setReplyInfo={setReplyInfo}
+                  message={item}
+                />
               ) : (
                 <LeftMessage
+                  replyInfo={replyInfo}
+                  setReplyInfo={setReplyInfo}
                   message={item}
                   index={index}
                   docs={data?.docs}

@@ -22,6 +22,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import Alert from "../Alert";
 import ClickAwayListener from "../ClickAwayListener";
 import { EMOJI_REPLACEMENT } from "../../shared/constants";
+import ReplyIcon from "./ReplyIcon";
 import Spin from "react-cssfx-loading/src/Spin";
 import StickerPicker from "./StickerPicker";
 import { formatFileName } from "../../shared/utils";
@@ -32,12 +33,16 @@ const Picker = lazy(() => import("./EmojiPicker"));
 
 interface InputSectionProps {
   disabled: boolean;
-  setIsFilePreviewOpened?: (value: boolean) => void;
+  setInputSectionOffset?: (value: number) => void;
+  replyInfo?: any;
+  setReplyInfo?: (value: any) => void;
 }
 
 const InputSection: FC<InputSectionProps> = ({
   disabled,
-  setIsFilePreviewOpened,
+  setInputSectionOffset,
+  replyInfo,
+  setReplyInfo,
 }) => {
   const [inputValue, setInputValue] = useState("");
 
@@ -110,6 +115,8 @@ const InputSection: FC<InputSectionProps> = ({
       });
     });
 
+    setReplyInfo && setReplyInfo(null);
+
     addDoc(
       collection(db, "conversations", conversationId as string, "messages"),
       {
@@ -117,6 +124,7 @@ const InputSection: FC<InputSectionProps> = ({
         content: replacedInputValue.trim(),
         type: "text",
         createdAt: serverTimestamp(),
+        replyTo: replyInfo?.id || null,
       }
     );
 
@@ -223,8 +231,13 @@ const InputSection: FC<InputSectionProps> = ({
   };
 
   useEffect(() => {
-    setIsFilePreviewOpened && setIsFilePreviewOpened(previewFiles.length > 0);
-  }, [previewFiles.length]);
+    if (!setInputSectionOffset) return;
+    if (previewFiles.length > 0) return setInputSectionOffset(128);
+
+    if (!!replyInfo) return setInputSectionOffset(76);
+
+    setInputSectionOffset(0);
+  }, [previewFiles.length, replyInfo]);
 
   const handlePaste: ClipboardEventHandler<HTMLInputElement> = (e) => {
     const file = e?.clipboardData?.files?.[0];
@@ -308,6 +321,36 @@ const InputSection: FC<InputSectionProps> = ({
               </button>
             </div>
           ))}
+        </div>
+      )}
+      {previewFiles.length === 0 && !!replyInfo && (
+        <div className="h-[76px] border-t border-dark-lighten p-4 flex justify-between">
+          <div>
+            <div className="flex items-center gap-2">
+              <ReplyIcon />
+              <p>
+                Replying
+                {currentUser?.uid === replyInfo.sender ? " to yourself" : ""}
+              </p>
+            </div>
+            {replyInfo.type === "text" ? (
+              <p className="overflow-hidden whitespace-nowrap text-ellipsis max-w-[calc(100vw-65px)] md:max-w-[calc(100vw-420px)]">
+                {replyInfo.content}
+              </p>
+            ) : replyInfo.type === "image" ? (
+              "An image"
+            ) : replyInfo.type === "file" ? (
+              "A file"
+            ) : replyInfo.type === "sticker" ? (
+              "A sticker"
+            ) : (
+              "Message has been removed"
+            )}
+          </div>
+
+          <button onClick={() => setReplyInfo && setReplyInfo(null)}>
+            <i className="bx bx-x text-3xl"></i>
+          </button>
         </div>
       )}
       <div

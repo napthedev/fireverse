@@ -28,6 +28,7 @@ export interface MessageItem {
   id?: string;
   sender: string;
   content: string;
+  replyTo?: string;
   file?: {
     name: string;
     size: number;

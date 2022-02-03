@@ -23,7 +23,9 @@ const Chat: FC = () => {
 
   const currentUser = useStore((state) => state.currentUser);
 
-  const [isFilePreviewOpened, setIsFilePreviewOpened] = useState(false);
+  const [inputSectionOffset, setInputSectionOffset] = useState(0);
+
+  const [replyInfo, setReplyInfo] = useState(null);
 
   return (
     <div className="flex">
@@ -47,12 +49,16 @@ const Chat: FC = () => {
           <>
             <ChatHeader conversation={conversation} />
             <ChatView
-              isFilePreviewOpened={isFilePreviewOpened}
+              replyInfo={replyInfo}
+              setReplyInfo={setReplyInfo}
+              inputSectionOffset={inputSectionOffset}
               key={id}
               conversation={conversation}
             />
             <InputSection
-              setIsFilePreviewOpened={setIsFilePreviewOpened}
+              setInputSectionOffset={setInputSectionOffset}
+              replyInfo={replyInfo}
+              setReplyInfo={setReplyInfo}
               disabled={false}
             />
           </>
