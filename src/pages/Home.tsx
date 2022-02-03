@@ -6,8 +6,8 @@ const Home: FC = () => {
     <div className="flex">
       <SideBar />
 
-      <div className="flex-grow flex flex-col items-center justify-center gap-3">
-        <h1>Select a conversation to start chatting</h1>
+      <div className="flex-grow hidden md:!flex flex-col items-center justify-center gap-3">
+        <h1 className="text-center">Select a conversation to start chatting</h1>
       </div>
     </div>
   );

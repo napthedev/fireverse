@@ -1,6 +1,7 @@
 import { ConversationInfo } from "../../shared/types";
 import { FC } from "react";
 import { IMAGE_PROXY } from "../../shared/constants";
+import { Link } from "react-router-dom";
 import Skeleton from "../Skeleton";
 import { useStore } from "../../store";
 import { useUsersInfo } from "../../hooks/useUsersInfo";
@@ -18,6 +19,9 @@ const ChatHeader: FC<ChatHeaderProps> = ({ conversation }) => {
   return (
     <div className="h-20 flex items-center justify-between px-5 border-b border-dark-lighten">
       <div className="flex items-center gap-3 flex-grow">
+        <Link to="/" className="md:hidden">
+          <i className="bx bxs-chevron-left text-3xl text-primary"></i>
+        </Link>
         {loading ? (
           <Skeleton className="w-10 h-10 rounded-full" />
         ) : (

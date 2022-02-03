@@ -1,11 +1,11 @@
 import { DEFAULT_AVATAR, IMAGE_PROXY } from "../../shared/constants";
 import { FC, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { collection, orderBy, query, where } from "firebase/firestore";
 
 import ClickAwayListener from "../ClickAwayListener";
 import { ConversationInfo } from "../../shared/types";
 import CreateConversation from "./CreateConversation";
-import { Link } from "react-router-dom";
 import SelectConversation from "./SelectConversation";
 import Skeleton from "../Skeleton";
 import { auth } from "../../shared/firebase";
@@ -30,9 +30,17 @@ const SideBar: FC = () => {
     )
   );
 
+  const location = useLocation();
+
   return (
     <>
-      <div className="w-[350px] flex-shrink-0 border-r border-dark-lighten h-screen overflow-y-auto overflow-x-hidden">
+      <div
+        className={`flex-shrink-0 border-r border-dark-lighten h-screen overflow-y-auto overflow-x-hidden ${
+          location.pathname !== "/"
+            ? "hidden md:!block w-[350px]"
+            : "w-full md:!w-[350px]"
+        }`}
+      >
         <div className="flex justify-between h-20 items-center px-6">
           <Link to="/" className="flex items-center gap-1">
             <img className="w-8 h-8" src="/icon.svg" alt="" />

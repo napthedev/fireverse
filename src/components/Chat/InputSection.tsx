@@ -387,6 +387,7 @@ const InputSection: FC<InputSectionProps> = ({
         >
           <div className="flex-grow flex items-center relative">
             <input
+              maxLength={1000}
               disabled={disabled}
               ref={textInputRef}
               value={inputValue}
