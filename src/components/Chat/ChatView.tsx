@@ -13,9 +13,10 @@ import { useStore } from "../../store";
 
 interface ChatViewProps {
   conversation: ConversationInfo;
+  isFilePreviewOpened: boolean;
 }
 
-const ChatView: FC<ChatViewProps> = ({ conversation }) => {
+const ChatView: FC<ChatViewProps> = ({ conversation, isFilePreviewOpened }) => {
   const { id: conversationId } = useParams();
 
   const currentUser = useStore((state) => state.currentUser);
@@ -69,7 +70,9 @@ const ChatView: FC<ChatViewProps> = ({ conversation }) => {
         </div>
       }
       style={{ display: "flex", flexDirection: "column-reverse" }}
-      height="calc(100vh - 144px)"
+      height={
+        isFilePreviewOpened ? "calc(100vh - 272px)" : "calc(100vh - 144px)"
+      }
     >
       <div className="flex flex-col items-stretch gap-3 pt-10 pb-1">
         {data?.docs

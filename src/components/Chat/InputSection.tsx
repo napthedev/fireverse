@@ -1,4 +1,13 @@
-import { ChangeEvent, FC, Suspense, lazy, useRef, useState } from "react";
+import {
+  ChangeEvent,
+  ClipboardEventHandler,
+  FC,
+  Suspense,
+  lazy,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   addDoc,
   collection,
@@ -22,12 +31,20 @@ const Picker = lazy(() => import("./EmojiPicker"));
 
 interface InputSectionProps {
   disabled: boolean;
+  isFilePreviewOpened?: boolean;
+  setIsFilePreviewOpened?: (value: boolean) => void;
 }
 
-const InputSection: FC<InputSectionProps> = ({ disabled }) => {
+const InputSection: FC<InputSectionProps> = ({
+  disabled,
+  isFilePreviewOpened,
+  setIsFilePreviewOpened,
+}) => {
   const [inputValue, setInputValue] = useState("");
 
   const [fileUploading, setFileUploading] = useState(false);
+
+  const [previewFiles, setPreviewFiles] = useState<string[]>([]);
 
   const [isStickerPickerOpened, setIsStickerPickerOpened] = useState(false);
   const [isIconPickerOpened, setIsIconPickerOpened] = useState(false);
@@ -48,8 +65,29 @@ const InputSection: FC<InputSectionProps> = ({ disabled }) => {
     });
   };
 
-  const submitMessage = () => {
-    if (fileUploading) return;
+  useEffect(() => {
+    const handler = () => {
+      textInputRef.current?.focus();
+    };
+    window.addEventListener("focus", handler);
+    return () => window.removeEventListener("focus", handler);
+  }, []);
+
+  const submitMessage = async () => {
+    if (previewFiles.length > 0) {
+      setPreviewFiles([]);
+      for (let i = 0; i < previewFiles.length; i++) {
+        const url = previewFiles[i];
+        const res = await fetch(url);
+        const blob = await res.blob();
+        const file = new File([blob], "image.png", {
+          type: res.headers.get("content-type") as string,
+        });
+        await uploadFile(file);
+      }
+    } else {
+      if (fileUploading) return;
+    }
 
     if (!inputValue.trim()) return;
 
@@ -82,50 +120,54 @@ const InputSection: FC<InputSectionProps> = ({ disabled }) => {
     updateTimestamp();
   };
 
+  const uploadFile = async (file: File) => {
+    try {
+      const TWENTY_MB = 1024 * 1024 * 20;
+
+      if (file.size > TWENTY_MB) {
+        setAlertText("Max file size is 20MB");
+        setIsAlertOpened(true);
+        return;
+      }
+
+      setFileUploading(true);
+
+      const fileReference = ref(storage, formatFileName(file.name));
+
+      await uploadBytes(fileReference, file);
+
+      const downloadURL = await getDownloadURL(fileReference);
+
+      addDoc(
+        collection(db, "conversations", conversationId as string, "messages"),
+        {
+          sender: currentUser?.uid,
+          content: downloadURL,
+          type: file.type.startsWith("image") ? "image" : "file",
+          file: file.type.startsWith("image")
+            ? null
+            : {
+                name: file.name,
+                size: file.size,
+              },
+          createdAt: serverTimestamp(),
+        }
+      );
+
+      setFileUploading(false);
+      updateTimestamp();
+    } catch (error) {
+      console.log(error);
+      setFileUploading(false);
+    }
+  };
+
   const handleFileInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
 
     if (!file) return;
 
-    const TWENTY_MB = 1024 * 1024 * 20;
-
-    if (file.size > TWENTY_MB) {
-      setAlertText("Max file size is 20MB");
-      setIsAlertOpened(true);
-      return;
-    }
-
-    setFileUploading(true);
-
-    const fileReference = ref(storage, formatFileName(file.name));
-
-    uploadBytes(fileReference, file)
-      .then(() => {
-        getDownloadURL(fileReference).then((url) => {
-          addDoc(
-            collection(
-              db,
-              "conversations",
-              conversationId as string,
-              "messages"
-            ),
-            {
-              sender: currentUser?.uid,
-              content: url,
-              type: file.name.startsWith("image") ? "image" : "file",
-              file: {
-                name: file.name,
-                size: file.size,
-              },
-              createdAt: serverTimestamp(),
-            }
-          );
-
-          setFileUploading(false);
-          updateTimestamp();
-        });
-      })
-      .catch(() => setFileUploading(false));
+    uploadFile(file);
   };
 
   const addIconToInput = (value: string) => {
@@ -163,8 +205,40 @@ const InputSection: FC<InputSectionProps> = ({ disabled }) => {
     }
   };
 
+  useEffect(() => {
+    setIsFilePreviewOpened && setIsFilePreviewOpened(previewFiles.length > 0);
+  }, [previewFiles.length]);
+
+  const handlePaste: ClipboardEventHandler<HTMLInputElement> = (e) => {
+    const file = e?.clipboardData?.files?.[0];
+    if (!file || !file.type.startsWith("image")) return;
+
+    const url = URL.createObjectURL(file);
+
+    setPreviewFiles([...previewFiles, url]);
+  };
+
   return (
     <>
+      {previewFiles.length > 0 && (
+        <div className="h-32 border-t border-dark-lighten flex items-center gap-2 px-4">
+          {previewFiles.map((preview) => (
+            <div key={preview} className="relative">
+              <img className="w-28 h-28 object-cover" src={preview} alt="" />
+              <button
+                onClick={() =>
+                  setPreviewFiles(
+                    previewFiles.filter((item) => item !== preview)
+                  )
+                }
+                className="absolute top-1 right-1 h-4 w-4 rounded-full flex items-center justify-center bg-gray-100"
+              >
+                <i className="bx bx-x text-dark text-lg"></i>
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
       <div
         className={`flex items-stretch h-16 px-4 gap-1 border-t border-dark-lighten ${
           disabled ? "pointer-events-none select-none" : ""
@@ -247,6 +321,7 @@ const InputSection: FC<InputSectionProps> = ({ disabled }) => {
             onKeyPress={(e) => {
               if (e.key === "Enter") submitMessage();
             }}
+            onPaste={handlePaste}
             className="w-full h-9 pl-3 pr-10 bg-dark-lighten outline-none rounded-full"
             type="text"
             placeholder="Message..."
@@ -266,7 +341,7 @@ const InputSection: FC<InputSectionProps> = ({ disabled }) => {
                 <div ref={ref} className="absolute bottom-full right-0">
                   <Suspense
                     fallback={
-                      <div className="w-[348px] h-[357px] flex justify-center items-center">
+                      <div className="w-[348px] h-[357px] bg-[#222222] border-[#555453] rounded-lg border-2 flex justify-center items-center">
                         <Spin />
                       </div>
                     }
@@ -281,7 +356,9 @@ const InputSection: FC<InputSectionProps> = ({ disabled }) => {
           )}
         </div>
         {fileUploading ? (
-          <Spin width="24px" height="24px" color="#0D90F3" />
+          <div className="flex items-center ml-1">
+            <Spin width="24px" height="24px" color="#0D90F3" />
+          </div>
         ) : (
           <button
             onClick={() => submitMessage()}

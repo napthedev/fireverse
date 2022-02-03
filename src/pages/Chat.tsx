@@ -1,7 +1,8 @@
+import { FC, useState } from "react";
+
 import ChatHeader from "../components/Chat/ChatHeader";
 import ChatView from "../components/Chat/ChatView";
 import { ConversationInfo } from "../shared/types";
-import { FC } from "react";
 import InputSection from "../components/Chat/InputSection";
 import SideBar from "../components/Home/SideBar";
 import { db } from "../shared/firebase";
@@ -22,11 +23,13 @@ const Chat: FC = () => {
 
   const currentUser = useStore((state) => state.currentUser);
 
+  const [isFilePreviewOpened, setIsFilePreviewOpened] = useState(false);
+
   return (
     <div className="flex">
       <SideBar />
 
-      <div className="flex-grow flex flex-col items-stretch">
+      <div className="flex-grow flex flex-col items-stretch h-screen">
         {loading ? (
           <>
             <div className="h-20 border-b border-dark-lighten"></div>
@@ -43,8 +46,16 @@ const Chat: FC = () => {
         ) : (
           <>
             <ChatHeader conversation={conversation} />
-            <ChatView key={id} conversation={conversation} />
-            <InputSection disabled={false} />
+            <ChatView
+              isFilePreviewOpened={isFilePreviewOpened}
+              key={id}
+              conversation={conversation}
+            />
+            <InputSection
+              setIsFilePreviewOpened={setIsFilePreviewOpened}
+              isFilePreviewOpened={isFilePreviewOpened}
+              disabled={false}
+            />
           </>
         )}
       </div>
