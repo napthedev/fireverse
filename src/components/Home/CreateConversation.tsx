@@ -91,8 +91,21 @@ const CreateConversation: FC<CreateConversationProps> = ({ setIsOpened }) => {
         onClick={(e) => e.stopPropagation()}
         className="bg-dark rounded-lg overflow-hidden w-full max-w-[500px] mx-3"
       >
-        <div className="py-3 border-b border-dark-lighten">
-          <h1 className="text-center text-2xl">New conversation</h1>
+        <div className="py-3 border-b border-dark-lighten flex justify-between items-center px-3">
+          <div className="flex-1"></div>
+          <div className="flex-1 flex justify-center items-center">
+            <h1 className="text-center text-2xl whitespace-nowrap">
+              New conversation
+            </h1>
+          </div>
+          <div className="flex-1 flex justify-end items-center">
+            <button
+              onClick={() => setIsOpened(false)}
+              className="w-8 h-8 bg-dark-lighten rounded-full flex justify-center items-center"
+            >
+              <i className="bx bx-x text-2xl"></i>
+            </button>
+          </div>
         </div>
         {loading ? (
           <div className="flex justify-center items-center h-96">

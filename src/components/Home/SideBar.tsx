@@ -8,6 +8,7 @@ import { ConversationInfo } from "../../shared/types";
 import CreateConversation from "./CreateConversation";
 import SelectConversation from "./SelectConversation";
 import Skeleton from "../Skeleton";
+import UserInfo from "./UserInfo";
 import { auth } from "../../shared/firebase";
 import { db } from "../../shared/firebase";
 import { signOut } from "firebase/auth";
@@ -20,6 +21,7 @@ const SideBar: FC = () => {
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
   const [createConversationOpened, setCreateConversationOpened] =
     useState(false);
+  const [isUserInfoOpened, setIsUserInfoOpened] = useState(false);
 
   const { data, error, loading } = useCollectionQuery(
     "conversations",
@@ -76,7 +78,13 @@ const SideBar: FC = () => {
                         : "opacity-0 invisible scale-0"
                     }`}
                   >
-                    <button className="flex items-center gap-1 px-3 py-1 hover:bg-dark-lighten transition duration-300">
+                    <button
+                      onClick={() => {
+                        setIsUserInfoOpened(true);
+                        setIsDropdownOpened(false);
+                      }}
+                      className="flex items-center gap-1 px-3 py-1 hover:bg-dark-lighten transition duration-300"
+                    >
                       <i className="bx bxs-user text-xl"></i>
                       <span className="whitespace-nowrap">Profile</span>
                     </button>
@@ -142,6 +150,8 @@ const SideBar: FC = () => {
       {createConversationOpened && (
         <CreateConversation setIsOpened={setCreateConversationOpened} />
       )}
+
+      <UserInfo isOpened={isUserInfoOpened} setIsOpened={setIsUserInfoOpened} />
     </>
   );
 };
