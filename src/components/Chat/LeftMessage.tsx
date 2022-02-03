@@ -5,6 +5,7 @@ import { formatDate, formatFileSize } from "../../shared/utils";
 import AvatarFromId from "./AvatarFromId";
 import ClickAwayListener from "../ClickAwayListener";
 import { EMOJI_REGEX } from "../../shared/constants";
+import ImageView from "./ImageView";
 import ReactionPopup from "./ReactionPopup";
 import ReactionStatus from "./ReactionStatus";
 import SpriteRenderer from "../SpriteRenderer";
@@ -25,6 +26,8 @@ const RightMessage: FC<RightMessageProps> = ({
 }) => {
   const [isSelectReactionOpened, setIsSelectReactionOpened] = useState(false);
   const currentUser = useStore((state) => state.currentUser);
+
+  const [isImageViewOpened, setIsImageViewOpened] = useState(false);
 
   const formattedDate = formatDate(
     message.createdAt.seconds ? message.createdAt.seconds * 1000 : Date.now()
@@ -66,12 +69,20 @@ const RightMessage: FC<RightMessageProps> = ({
           )}
         </>
       ) : message.type === "image" ? (
-        <img
-          title={formattedDate}
-          className="max-w-[60%]"
-          src={message.content}
-          alt=""
-        />
+        <>
+          <img
+            onClick={() => setIsImageViewOpened(true)}
+            title={formattedDate}
+            className="max-w-[60%] cursor-pointer"
+            src={message.content}
+            alt=""
+          />
+          <ImageView
+            src={message.content}
+            isOpened={isImageViewOpened}
+            setIsOpened={setIsImageViewOpened}
+          />
+        </>
       ) : message.type === "file" ? (
         <div
           title={formattedDate}

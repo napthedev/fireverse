@@ -4,6 +4,7 @@ import { formatDate, formatFileSize } from "../../shared/utils";
 
 import ClickAwayListener from "../ClickAwayListener";
 import { EMOJI_REGEX } from "../../shared/constants";
+import ImageView from "./ImageView";
 import { MessageItem } from "../../shared/types";
 import ReactionPopup from "./ReactionPopup";
 import ReactionStatus from "./ReactionStatus";
@@ -22,6 +23,8 @@ const RightMessage: FC<RightMessageProps> = ({ message }) => {
   const { id: conversationId } = useParams();
 
   const currentUser = useStore((state) => state.currentUser);
+
+  const [isImageViewOpened, setIsImageViewOpened] = useState(false);
 
   const removeMessage = (messageId: string) => {
     updateDoc(
@@ -61,12 +64,20 @@ const RightMessage: FC<RightMessageProps> = ({ message }) => {
           )}
         </>
       ) : message.type === "image" ? (
-        <img
-          title={formattedDate}
-          className="max-w-[60%]"
-          src={message.content}
-          alt=""
-        />
+        <>
+          <img
+            onClick={() => setIsImageViewOpened(true)}
+            title={formattedDate}
+            className="max-w-[60%] cursor-pointer"
+            src={message.content}
+            alt=""
+          />
+          <ImageView
+            src={message.content}
+            isOpened={isImageViewOpened}
+            setIsOpened={setIsImageViewOpened}
+          />
+        </>
       ) : message.type === "file" ? (
         <div
           title={formattedDate}
