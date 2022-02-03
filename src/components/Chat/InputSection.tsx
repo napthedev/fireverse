@@ -32,13 +32,11 @@ const Picker = lazy(() => import("./EmojiPicker"));
 
 interface InputSectionProps {
   disabled: boolean;
-  isFilePreviewOpened?: boolean;
   setIsFilePreviewOpened?: (value: boolean) => void;
 }
 
 const InputSection: FC<InputSectionProps> = ({
   disabled,
-  isFilePreviewOpened,
   setIsFilePreviewOpened,
 }) => {
   const [inputValue, setInputValue] = useState("");
@@ -75,6 +73,10 @@ const InputSection: FC<InputSectionProps> = ({
     window.addEventListener("focus", handler);
     return () => window.removeEventListener("focus", handler);
   }, []);
+
+  useEffect(() => {
+    textInputRef.current?.focus();
+  }, [conversationId]);
 
   const handleFormSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -385,6 +387,7 @@ const InputSection: FC<InputSectionProps> = ({
         >
           <div className="flex-grow flex items-center relative">
             <input
+              disabled={disabled}
               ref={textInputRef}
               value={inputValue}
               onChange={(e) => {
@@ -395,7 +398,6 @@ const InputSection: FC<InputSectionProps> = ({
               className="w-full h-9 pl-3 pr-10 bg-dark-lighten outline-none rounded-full"
               type="text"
               placeholder="Message..."
-              autoFocus
             />
             <button
               type="button"

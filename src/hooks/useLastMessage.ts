@@ -38,7 +38,7 @@ export const useLastMessage = (conversationId: string) => {
           return;
         }
         const type = snapshot.docs?.[0]?.data()?.type;
-        const response =
+        let response =
           type === "image"
             ? "An image"
             : type === "file"
@@ -49,18 +49,25 @@ export const useLastMessage = (conversationId: string) => {
             ? "A sticker"
             : type === "removed"
             ? "Message removed"
-            : snapshot.docs[0].data().content.length > 20
-            ? `${snapshot.docs[0].data().content.slice(0, 20)}...`
-            : snapshot.docs[0].data().content;
+            : (snapshot.docs[0].data().content as string);
 
         const seconds = snapshot.docs[0]?.data()?.createdAt?.seconds;
         const formattedDate = formatDate(seconds ? seconds * 1000 : Date.now());
+
+        response =
+          response.length > 30 - formattedDate.length
+            ? `${response.slice(0, 30 - formattedDate.length)}...`
+            : response;
+
         const result = `${response} • ${formattedDate}`;
         setData({
           lastMessageId: snapshot.docs?.[0]?.id,
           message: result,
         });
-        cache[conversationId] = result;
+        cache[conversationId] = {
+          lastMessageId: snapshot.docs?.[0]?.id,
+          message: result,
+        };
         setLoading(false);
         setError(false);
       },

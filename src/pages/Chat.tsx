@@ -53,7 +53,6 @@ const Chat: FC = () => {
             />
             <InputSection
               setIsFilePreviewOpened={setIsFilePreviewOpened}
-              isFilePreviewOpened={isFilePreviewOpened}
               disabled={false}
             />
           </>
