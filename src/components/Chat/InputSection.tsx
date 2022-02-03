@@ -60,6 +60,8 @@ const InputSection: FC<InputSectionProps> = ({
   const imageInputRef = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const [fileDragging, setFileDragging] = useState(false);
+
   const updateTimestamp = () => {
     updateDoc(doc(db, "conversations", conversationId as string), {
       updatedAt: serverTimestamp(),
@@ -231,8 +233,62 @@ const InputSection: FC<InputSectionProps> = ({
     setPreviewFiles([...previewFiles, url]);
   };
 
+  useEffect(() => {
+    const dragBlurHandler = (e: any) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setFileDragging(false);
+    };
+
+    const dragFocusHandler = (e: any) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setFileDragging(true);
+    };
+
+    const dropFileHandler = async (e: any) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      setFileDragging(false);
+
+      let items = e.dataTransfer.items;
+      let files = e.dataTransfer.files;
+
+      let selectedFiles = [];
+
+      for (let i = 0, item; (item = items[i]); ++i) {
+        let entry = item.webkitGetAsEntry();
+        if (entry.isFile) {
+          selectedFiles.push(files[i]);
+        }
+      }
+
+      for (let i = 0; i < selectedFiles.length; i++) {
+        await uploadFile(selectedFiles[i]);
+      }
+    };
+
+    addEventListener("dragenter", dragFocusHandler);
+    addEventListener("dragover", dragFocusHandler);
+    addEventListener("dragleave", dragBlurHandler);
+    addEventListener("drop", dropFileHandler);
+
+    return () => {
+      removeEventListener("dragenter", dragFocusHandler);
+      removeEventListener("dragover", dragFocusHandler);
+      removeEventListener("dragleave", dragBlurHandler);
+      removeEventListener("drop", dropFileHandler);
+    };
+  }, []);
+
   return (
     <>
+      {fileDragging && (
+        <div className="fixed top-0 left-0 w-full h-full backdrop-blur-sm z-20 flex justify-center items-center pointer-events-none select-none">
+          <h1 className="text-3xl">Drop file to send</h1>
+        </div>
+      )}
       {previewFiles.length > 0 && (
         <div className="h-32 border-t border-dark-lighten flex items-center gap-2 px-4">
           {previewFiles.map((preview) => (

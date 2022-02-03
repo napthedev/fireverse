@@ -10,7 +10,7 @@ const ImageView: FC<ImageViewProps> = ({ src, isOpened, setIsOpened }) => {
   return (
     <div
       onClick={() => setIsOpened(false)}
-      className={`fixed top-0 left-0 w-full h-full bg-[#00000080] transition duration-300 flex justify-center items-center z-20 ${
+      className={`fixed top-0 left-0 w-full h-full bg-[#00000080] transition-all duration-300 flex justify-center items-center z-20 ${
         isOpened ? "opacity-100 visible" : "opacity-0 invisible"
       }`}
     >
