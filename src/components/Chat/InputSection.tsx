@@ -2,6 +2,7 @@ import {
   ChangeEvent,
   ClipboardEventHandler,
   FC,
+  FormEvent,
   Suspense,
   lazy,
   useEffect,
@@ -73,7 +74,9 @@ const InputSection: FC<InputSectionProps> = ({
     return () => window.removeEventListener("focus", handler);
   }, []);
 
-  const submitMessage = async () => {
+  const handleFormSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+
     if (previewFiles.length > 0) {
       setPreviewFiles([]);
       for (let i = 0; i < previewFiles.length; i++) {
@@ -93,11 +96,21 @@ const InputSection: FC<InputSectionProps> = ({
 
     setInputValue("");
 
+    let replacedInputValue = ` ${inputValue} `;
+
+    Object.entries(EMOJI_REPLACEMENT).map(([key, value]) => {
+      value.forEach((item) => {
+        replacedInputValue = replacedInputValue
+          .split(` ${item} `)
+          .join(` ${key} `);
+      });
+    });
+
     addDoc(
       collection(db, "conversations", conversationId as string, "messages"),
       {
         sender: currentUser?.uid,
-        content: inputValue.trim(),
+        content: replacedInputValue.trim(),
         type: "text",
         createdAt: serverTimestamp(),
       }
@@ -179,7 +192,7 @@ const InputSection: FC<InputSectionProps> = ({
   };
 
   const handleReplaceEmoji = (e: any) => {
-    if (e.key === " " || e.key === "Enter") {
+    if (e.key === " ") {
       if (e.target.selectionStart !== e.target.selectionEnd) return;
 
       const lastWord = inputValue
@@ -310,63 +323,64 @@ const InputSection: FC<InputSectionProps> = ({
           </button>
         </div>
 
-        <div className="flex-grow flex items-center relative">
-          <input
-            ref={textInputRef}
-            value={inputValue}
-            onChange={(e) => {
-              setInputValue(e.target.value);
-            }}
-            onKeyDown={handleReplaceEmoji}
-            onKeyPress={(e) => {
-              if (e.key === "Enter") submitMessage();
-            }}
-            onPaste={handlePaste}
-            className="w-full h-9 pl-3 pr-10 bg-dark-lighten outline-none rounded-full"
-            type="text"
-            placeholder="Message..."
-            autoFocus
-          />
-          <button
-            type="button"
-            onClick={() => setIsIconPickerOpened(true)}
-            className="absolute right-2 top-1/2 -translate-y-1/2"
-          >
-            <i className="bx bxs-smile text-primary text-2xl"></i>
-          </button>
+        <form
+          onSubmit={handleFormSubmit}
+          className="flex-grow flex items-stretch gap-1"
+        >
+          <div className="flex-grow flex items-center relative">
+            <input
+              ref={textInputRef}
+              value={inputValue}
+              onChange={(e) => {
+                setInputValue(e.target.value);
+              }}
+              onKeyDown={handleReplaceEmoji}
+              onPaste={handlePaste}
+              className="w-full h-9 pl-3 pr-10 bg-dark-lighten outline-none rounded-full"
+              type="text"
+              placeholder="Message..."
+              autoFocus
+            />
+            <button
+              type="button"
+              onClick={() => setIsIconPickerOpened(true)}
+              className="absolute right-2 top-1/2 -translate-y-1/2"
+            >
+              <i className="bx bxs-smile text-primary text-2xl"></i>
+            </button>
 
-          {isIconPickerOpened && (
-            <ClickAwayListener onClickAway={() => setIsIconPickerOpened(false)}>
-              {(ref) => (
-                <div ref={ref} className="absolute bottom-full right-0">
-                  <Suspense
-                    fallback={
-                      <div className="w-[348px] h-[357px] bg-[#222222] border-[#555453] rounded-lg border-2 flex justify-center items-center">
-                        <Spin />
-                      </div>
-                    }
-                  >
-                    <Picker
-                      onSelect={(emoji: any) => addIconToInput(emoji.native)}
-                    />
-                  </Suspense>
-                </div>
-              )}
-            </ClickAwayListener>
-          )}
-        </div>
-        {fileUploading ? (
-          <div className="flex items-center ml-1">
-            <Spin width="24px" height="24px" color="#0D90F3" />
+            {isIconPickerOpened && (
+              <ClickAwayListener
+                onClickAway={() => setIsIconPickerOpened(false)}
+              >
+                {(ref) => (
+                  <div ref={ref} className="absolute bottom-full right-0">
+                    <Suspense
+                      fallback={
+                        <div className="w-[348px] h-[357px] bg-[#222222] border-[#555453] rounded-lg border-2 flex justify-center items-center">
+                          <Spin />
+                        </div>
+                      }
+                    >
+                      <Picker
+                        onSelect={(emoji: any) => addIconToInput(emoji.native)}
+                      />
+                    </Suspense>
+                  </div>
+                )}
+              </ClickAwayListener>
+            )}
           </div>
-        ) : (
-          <button
-            onClick={() => submitMessage()}
-            className="flex-shrink-0 text-2xl text-primary flex items-center"
-          >
-            <i className="bx bxs-send"></i>
-          </button>
-        )}
+          {fileUploading ? (
+            <div className="flex items-center ml-1">
+              <Spin width="24px" height="24px" color="#0D90F3" />
+            </div>
+          ) : (
+            <button className="flex-shrink-0 text-2xl text-primary flex items-center">
+              <i className="bx bxs-send"></i>
+            </button>
+          )}
+        </form>
       </div>
 
       <Alert
