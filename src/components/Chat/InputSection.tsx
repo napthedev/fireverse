@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, FormEvent, useRef, useState } from "react";
+import { ChangeEvent, FC, Suspense, lazy, useRef, useState } from "react";
 import {
   addDoc,
   collection,
@@ -12,12 +12,13 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import Alert from "../Alert";
 import ClickAwayListener from "../ClickAwayListener";
 import { EMOJI_REPLACEMENT } from "../../shared/constants";
-import { Picker } from "emoji-mart";
 import Spin from "react-cssfx-loading/src/Spin";
 import StickerPicker from "./StickerPicker";
 import { formatFileName } from "../../shared/utils";
 import { useParams } from "react-router-dom";
 import { useStore } from "../../store";
+
+const Picker = lazy(() => import("./EmojiPicker"));
 
 interface InputSectionProps {
   disabled: boolean;
@@ -263,17 +264,17 @@ const InputSection: FC<InputSectionProps> = ({ disabled }) => {
             <ClickAwayListener onClickAway={() => setIsIconPickerOpened(false)}>
               {(ref) => (
                 <div ref={ref} className="absolute bottom-full right-0">
-                  <Picker
-                    set="facebook"
-                    enableFrequentEmojiSort
-                    onSelect={(emoji: any) => addIconToInput(emoji.native)}
-                    theme="dark"
-                    showPreview={false}
-                    showSkinTones={false}
-                    emojiTooltip
-                    defaultSkin={1}
-                    color="#0F8FF3"
-                  />
+                  <Suspense
+                    fallback={
+                      <div className="w-[348px] h-[357px] flex justify-center items-center">
+                        <Spin />
+                      </div>
+                    }
+                  >
+                    <Picker
+                      onSelect={(emoji: any) => addIconToInput(emoji.native)}
+                    />
+                  </Suspense>
                 </div>
               )}
             </ClickAwayListener>
