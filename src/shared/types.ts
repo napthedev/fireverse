@@ -1,12 +1,11 @@
 export interface ConversationInfo {
   users: string[];
-  group:
-    | {
-        admins: string[];
-        groupName: null | string;
-        groupImage: null | string;
-      }
-    | {};
+  group?: {
+    admins: string[];
+    groupName: null | string;
+    groupImage: null | string;
+  };
+
   seen: {
     [key: string]: string;
   };

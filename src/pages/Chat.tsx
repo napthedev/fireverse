@@ -52,7 +52,6 @@ const Chat: FC = () => {
               replyInfo={replyInfo}
               setReplyInfo={setReplyInfo}
               inputSectionOffset={inputSectionOffset}
-              key={id}
               conversation={conversation}
             />
             <InputSection
