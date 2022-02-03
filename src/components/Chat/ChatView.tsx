@@ -50,11 +50,16 @@ const ChatView: FC<ChatViewProps> = ({
   );
 
   const dataRef = useRef(data);
+  const conversationIdRef = useRef(conversationId);
   const isWindowFocus = useRef(true);
 
   useEffect(() => {
     dataRef.current = data;
   }, [data]);
+
+  useEffect(() => {
+    conversationIdRef.current = conversationId;
+  }, [conversationId]);
 
   useEffect(() => {
     if (isWindowFocus.current) updateSeenStatus();
@@ -73,7 +78,7 @@ const ChatView: FC<ChatViewProps> = ({
 
     if (!lastDoc) return;
 
-    updateDoc(doc(db, "conversations", conversationId as string), {
+    updateDoc(doc(db, "conversations", conversationIdRef.current as string), {
       [`seen.${currentUser?.uid}`]: lastDoc.id,
     });
   };
