@@ -10,8 +10,7 @@ let cache: { [key: string]: any } = {};
 
 export const useDocumentQuery = (
   key: string,
-  document: DocumentReference<DocumentData>,
-  keepLastOne: boolean = true
+  document: DocumentReference<DocumentData>
 ) => {
   const [data, setData] = useState<DocumentSnapshot<DocumentData> | null>(
     cache[key] || null
@@ -20,17 +19,11 @@ export const useDocumentQuery = (
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    if (!keepLastOne) {
-      setData(null);
-      setLoading(true);
-      setError(false);
-    }
     const unsubscribe = onSnapshot(
       document,
       (snapshot) => {
         setData(snapshot);
         setLoading(false);
-        setError(false);
       },
       (err) => {
         console.log(err);
