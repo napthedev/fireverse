@@ -5,7 +5,7 @@ module.exports = {
       colors: {
         dark: "#242526",
         "dark-lighten": "#3A3B3C",
-        primary: "#0D90F3",
+        primary: "var(--primary-color)",
       },
     },
     keyframes: {

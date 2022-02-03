@@ -70,3 +70,15 @@ export const EMOJI_REPLACEMENT = {
 };
 
 export const EMOJI_REGEX = /^\p{Extended_Pictographic}$/u;
+
+export const THEMES = [
+  "#0D90F3",
+  "#EB3A2A",
+  "#0AD4EB",
+  "#643ECB",
+  "#93BF34",
+  "#E84FCF",
+  "#B43F3F",
+  "#E6A50A",
+  "#69C90C",
+];

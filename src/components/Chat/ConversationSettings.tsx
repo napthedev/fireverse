@@ -5,6 +5,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 import Alert from "../Alert";
 import { ConversationInfo } from "../../shared/types";
+import { THEMES } from "../../shared/constants";
 import { formatFileName } from "../../shared/utils";
 import { useParams } from "react-router-dom";
 
@@ -25,6 +26,8 @@ const ConversationSettings: FC<ConversationConfigProps> = ({
   const [chatNameInputValue, setChatNameInputValue] = useState(
     conversation?.group?.groupName || ""
   );
+
+  const [isChangeThemeOpened, setIsChangeThemeOpened] = useState(false);
 
   const [isAlertOpened, setIsAlertOpened] = useState(false);
   const [alertText, setAlertText] = useState("");
@@ -68,6 +71,12 @@ const ConversationSettings: FC<ConversationConfigProps> = ({
 
     updateDoc(doc(db, "conversations", conversationId as string), {
       "group.groupImage": downloadURL,
+    });
+  };
+
+  const changeTheme = (value: string) => {
+    updateDoc(doc(db, "conversations", conversationId as string), {
+      theme: value,
     });
   };
 
@@ -158,10 +167,36 @@ const ConversationSettings: FC<ConversationConfigProps> = ({
               />
             </>
           )}
-          <button className="flex items-center px-3 py-2 gap-3 rounded-lg hover:brightness-125 bg-dark transition duration-300">
-            <i className="bx bx-palette text-2xl"></i>
-            <span>Change theme</span>
+          <button
+            onClick={() => setIsChangeThemeOpened((prev) => !prev)}
+            className="flex items-center justify-between px-3 py-2 gap-3 rounded-lg hover:brightness-125 bg-dark transition duration-300"
+          >
+            <div className="flex gap-3 items-center">
+              <i className="bx bx-palette text-2xl"></i>
+              <span>Change theme</span>
+            </div>
+
+            <i
+              className={`bx bx-chevron-down text-3xl ${
+                isChangeThemeOpened ? "rotate-180" : ""
+              }`}
+            ></i>
           </button>
+
+          {isChangeThemeOpened && (
+            <div className="flex gap-3 flex-wrap p-4">
+              {THEMES.map((theme) => (
+                <div
+                  key={theme}
+                  style={{ background: theme }}
+                  onClick={() => changeTheme(theme)}
+                  className={`w-14 h-14 rounded-full cursor-pointer ${
+                    conversation.theme === theme ? "check-overlay" : ""
+                  }`}
+                ></div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

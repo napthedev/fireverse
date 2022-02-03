@@ -1,4 +1,5 @@
 import { FC, useState } from "react";
+import { IMAGE_PROXY, THEMES } from "../../shared/constants";
 import {
   addDoc,
   collection,
@@ -8,7 +9,6 @@ import {
   where,
 } from "firebase/firestore";
 
-import { IMAGE_PROXY } from "../../shared/constants";
 import Spin from "react-cssfx-loading/src/Spin";
 import { db } from "../../shared/firebase";
 import { useCollectionQuery } from "../../hooks/useCollectionQuery";
@@ -66,6 +66,7 @@ const CreateConversation: FC<CreateConversationProps> = ({ setIsOpened }) => {
             : {},
         updatedAt: serverTimestamp(),
         seen: {},
+        theme: THEMES[0],
       });
 
       setIsCreating(false);

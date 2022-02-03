@@ -13,6 +13,7 @@ export interface ConversationInfo {
     seconds: number;
     nanoseconds: number;
   };
+  theme: string;
 }
 
 export interface SavedUser {

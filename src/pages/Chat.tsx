@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 
 import ChatHeader from "../components/Chat/ChatHeader";
 import ChatView from "../components/Chat/ChatView";
@@ -26,6 +26,11 @@ const Chat: FC = () => {
   const [inputSectionOffset, setInputSectionOffset] = useState(0);
 
   const [replyInfo, setReplyInfo] = useState(null);
+
+  useEffect(() => {
+    if (conversation?.theme)
+      document.body.style.setProperty("--primary-color", conversation.theme);
+  }, [conversation?.theme || ""]);
 
   return (
     <div className="flex">
