@@ -1,7 +1,15 @@
 import { ConversationInfo, MessageItem } from "../../shared/types";
 import { FC, Fragment, useEffect, useRef, useState } from "react";
-import { collection, limitToLast, orderBy, query } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  limitToLast,
+  orderBy,
+  query,
+  updateDoc,
+} from "firebase/firestore";
 
+import AvatarFromId from "./AvatarFromId";
 import InfiniteScroll from "react-infinite-scroll-component";
 import LeftMessage from "./LeftMessage";
 import RightMessage from "./RightMessage";
@@ -34,13 +42,54 @@ const ChatView: FC<ChatViewProps> = ({ conversation, isFilePreviewOpened }) => {
     )
   );
 
+  const dataRef = useRef(data);
+  const isWindowFocus = useRef(true);
+
   useEffect(() => {
+    dataRef.current = data;
+  }, [data]);
+
+  useEffect(() => {
+    if (isWindowFocus.current) updateSeenStatus();
+
     scrollBottomRef.current?.scrollIntoView();
 
     setTimeout(() => {
       scrollBottomRef.current?.scrollIntoView();
     }, 100);
   }, [data?.docs?.slice(-1)?.[0]?.id || ""]);
+
+  const updateSeenStatus = () => {
+    if (dataRef.current?.empty) return;
+
+    const lastDoc = dataRef.current?.docs?.slice(-1)?.[0];
+
+    if (!lastDoc) return;
+
+    updateDoc(doc(db, "conversations", conversationId as string), {
+      [`seen.${currentUser?.uid}`]: lastDoc.id,
+    });
+  };
+
+  useEffect(() => {
+    const focusHandler = () => {
+      isWindowFocus.current = true;
+
+      updateSeenStatus();
+    };
+
+    const blurHandler = () => {
+      isWindowFocus.current = false;
+    };
+
+    addEventListener("focus", focusHandler);
+    addEventListener("blur", blurHandler);
+
+    return () => {
+      removeEventListener("focus", focusHandler);
+      removeEventListener("blur", blurHandler);
+    };
+  }, []);
 
   if (loading)
     return (
@@ -52,7 +101,7 @@ const ChatView: FC<ChatViewProps> = ({ conversation, isFilePreviewOpened }) => {
   if (data?.empty)
     return (
       <div className="flex-grow">
-        <p className="text-center text-gray-400">
+        <p className="text-center text-gray-400 mt-4">
           No message recently. Start chatting now.
         </p>
       </div>
@@ -88,6 +137,20 @@ const ChatView: FC<ChatViewProps> = ({ conversation, isFilePreviewOpened }) => {
                   docs={data?.docs}
                   conversation={conversation}
                 />
+              )}
+              {Object.entries(conversation.seen).filter(
+                ([key, value]) => key !== currentUser?.uid && value === item.id
+              ).length > 0 && (
+                <div className="flex justify-end px-8 gap-[1px]">
+                  {Object.entries(conversation.seen)
+                    .filter(
+                      ([key, value]) =>
+                        key !== currentUser?.uid && value === item.id
+                    )
+                    .map(([key, value]) => (
+                      <AvatarFromId uid={key} size={14} />
+                    ))}
+                </div>
               )}
             </Fragment>
           ))}

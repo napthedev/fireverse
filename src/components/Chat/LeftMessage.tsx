@@ -73,7 +73,7 @@ const RightMessage: FC<RightMessageProps> = ({
           <img
             onClick={() => setIsImageViewOpened(true)}
             title={formattedDate}
-            className="max-w-[60%] cursor-pointer hover:brightness-125 transition duration-300"
+            className="max-w-[60%] cursor-pointer hover:brightness-[85%] transition duration-300"
             src={message.content}
             alt=""
           />

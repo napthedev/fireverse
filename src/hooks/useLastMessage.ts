@@ -29,6 +29,8 @@ export const useLastMessage = (conversationId: string) => {
       (snapshot) => {
         if (snapshot.empty) {
           setData("No message recently");
+          setLoading(false);
+          setError(false);
           return;
         }
         const type = snapshot.docs?.[0]?.data()?.type;

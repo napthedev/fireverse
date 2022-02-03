@@ -57,14 +57,15 @@ const CreateConversation: FC<CreateConversationProps> = ({ setIsOpened }) => {
       const created = await addDoc(collection(db, "conversations"), {
         users: sorted,
         group:
-          selected.length > 2
+          sorted.length > 2
             ? {
                 admins: [currentUser?.uid],
                 groupName: null,
                 groupImage: null,
               }
-            : null,
+            : {},
         updatedAt: serverTimestamp(),
+        seen: {},
       });
 
       setIsCreating(false);

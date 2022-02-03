@@ -1,10 +1,19 @@
 export interface ConversationInfo {
   users: string[];
-  group: {
-    admins: string[];
-    groupName: null | string;
-    groupImage: null | string;
-  } | null;
+  group:
+    | {
+        admins: string[];
+        groupName: null | string;
+        groupImage: null | string;
+      }
+    | {};
+  seen: {
+    [key: string]: string;
+  };
+  updatedAt: {
+    seconds: number;
+    nanoseconds: number;
+  };
 }
 
 export interface SavedUser {

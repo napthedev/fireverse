@@ -12,7 +12,12 @@ const AvatarFromId: FC<AvatarFromIdProps> = ({ uid, size = 30 }) => {
   const { data, loading, error } = useUsersInfo([uid]);
 
   if (loading)
-    return <Skeleton style={{ width: size, height: size }}></Skeleton>;
+    return (
+      <Skeleton
+        className="rounded-full"
+        style={{ width: size, height: size }}
+      ></Skeleton>
+    );
 
   return (
     <img
