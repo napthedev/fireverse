@@ -148,7 +148,7 @@ const ChatView: FC<ChatViewProps> = ({ conversation, isFilePreviewOpened }) => {
                         key !== currentUser?.uid && value === item.id
                     )
                     .map(([key, value]) => (
-                      <AvatarFromId uid={key} size={14} />
+                      <AvatarFromId key={key} uid={key} size={14} />
                     ))}
                 </div>
               )}

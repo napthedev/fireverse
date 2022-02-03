@@ -13,9 +13,10 @@ import { formatDate } from "../shared/utils";
 let cache: { [key: string]: any } = {};
 
 export const useLastMessage = (conversationId: string) => {
-  const [data, setData] = useState<string | null>(
-    cache[conversationId] || null
-  );
+  const [data, setData] = useState<{
+    lastMessageId: string | null;
+    message: string;
+  } | null>(cache[conversationId] || null);
   const [loading, setLoading] = useState(!data);
   const [error, setError] = useState(false);
 
@@ -28,7 +29,10 @@ export const useLastMessage = (conversationId: string) => {
       ),
       (snapshot) => {
         if (snapshot.empty) {
-          setData("No message recently");
+          setData({
+            lastMessageId: null,
+            message: "No message recently",
+          });
           setLoading(false);
           setError(false);
           return;
@@ -52,7 +56,10 @@ export const useLastMessage = (conversationId: string) => {
         const seconds = snapshot.docs[0]?.data()?.createdAt?.seconds;
         const formattedDate = formatDate(seconds ? seconds * 1000 : Date.now());
         const result = `${response} • ${formattedDate}`;
-        setData(result);
+        setData({
+          lastMessageId: snapshot.docs?.[0]?.id,
+          message: result,
+        });
         cache[conversationId] = result;
         setLoading(false);
         setError(false);

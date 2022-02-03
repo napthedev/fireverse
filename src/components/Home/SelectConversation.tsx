@@ -45,7 +45,7 @@ const SelectConversation: FC<SelectConversationProps> = ({
     return (
       <Link
         to={`/${conversationId}`}
-        className={`flex items-stretch py-2 px-5 gap-2 hover:bg-dark-lighten transition duration-300 ${
+        className={`flex items-stretch py-2 px-5 gap-2 hover:bg-dark-lighten relative transition duration-300 ${
           conversationId === id ? "!bg-[#263342]" : ""
         }`}
       >
@@ -62,17 +62,26 @@ const SelectConversation: FC<SelectConversationProps> = ({
             <Skeleton className="w-2/3 flex-grow" />
           ) : (
             <p className="flex-grow text-sm text-gray-400 whitespace-nowrap overflow-hidden text-ellipsis max-w-[240px]">
-              {lastMessage}
+              {lastMessage?.message}
             </p>
           )}
         </div>
+        {!lastMessageLoading && (
+          <>
+            {lastMessage?.lastMessageId !== null &&
+              lastMessage?.lastMessageId !==
+                conversation.seen[currentUser?.uid as string] && (
+                <div className="absolute top-1/2 -translate-y-1/2 right-4 w-[10px] h-[10px] bg-primary rounded-full"></div>
+              )}
+          </>
+        )}
       </Link>
     );
 
   return (
     <Link
       to={`/${conversationId}`}
-      className={`flex items-stretch py-2 px-5 gap-2 hover:bg-dark-lighten group transition duration-300 ${
+      className={`flex items-stretch py-2 px-5 gap-2 hover:bg-dark-lighten relative group transition duration-300 ${
         conversationId === id ? "!bg-[#252F3C]" : ""
       }`}
     >
@@ -98,10 +107,19 @@ const SelectConversation: FC<SelectConversationProps> = ({
           <Skeleton className="w-2/3 flex-grow" />
         ) : (
           <p className="flex-grow text-sm text-gray-400 whitespace-nowrap overflow-hidden text-ellipsis max-w-[240px]">
-            {lastMessage}
+            {lastMessage?.message}
           </p>
         )}
       </div>
+      {!lastMessageLoading && (
+        <>
+          {lastMessage?.lastMessageId !== null &&
+            lastMessage?.lastMessageId !==
+              conversation.seen[currentUser?.uid as string] && (
+              <div className="absolute top-1/2 -translate-y-1/2 right-4 w-[10px] h-[10px] bg-primary rounded-full"></div>
+            )}
+        </>
+      )}
     </Link>
   );
 };
