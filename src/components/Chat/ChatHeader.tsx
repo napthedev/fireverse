@@ -6,6 +6,7 @@ import { IMAGE_PROXY } from "../../shared/constants";
 import { Link } from "react-router-dom";
 import Skeleton from "../Skeleton";
 import ViewGroup from "../Group/ViewGroup";
+import ViewMedia from "../Media/ViewMedia";
 import { useStore } from "../../store";
 import { useUsersInfo } from "../../hooks/useUsersInfo";
 
@@ -22,6 +23,7 @@ const ChatHeader: FC<ChatHeaderProps> = ({ conversation }) => {
   const [isConversationSettingsOpened, setIsConversationSettingsOpened] =
     useState(false);
   const [isGroupMembersOpened, setIsGroupMembersOpened] = useState(false);
+  const [isViewMediaOpened, setIsViewMediaOpened] = useState(false);
 
   return (
     <>
@@ -97,6 +99,7 @@ const ChatHeader: FC<ChatHeaderProps> = ({ conversation }) => {
         <ConversationSettings
           setIsOpened={setIsConversationSettingsOpened}
           conversation={conversation}
+          setMediaViewOpened={setIsViewMediaOpened}
         />
       )}
 
@@ -106,6 +109,7 @@ const ChatHeader: FC<ChatHeaderProps> = ({ conversation }) => {
           conversation={conversation}
         />
       )}
+      {isViewMediaOpened && <ViewMedia setIsOpened={setIsViewMediaOpened} />}
     </>
   );
 };

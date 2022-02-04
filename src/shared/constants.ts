@@ -5,6 +5,9 @@ export const IMAGE_PROXY = (url: string) =>
 export const STICKERS_URL =
   "https://cdn.jsdelivr.net/gh/naptestdev/zalo-stickers/data/favourite.json";
 
+export const FILE_ICON = (extension: string) =>
+  `https://cdn.jsdelivr.net/gh/napthedev/file-icons/file/${extension}.svg`;
+
 export const REACTIONS_UI: {
   [key: string]: {
     icon: string;

@@ -12,11 +12,13 @@ import { useParams } from "react-router-dom";
 interface ConversationConfigProps {
   conversation: ConversationInfo;
   setIsOpened: (value: boolean) => void;
+  setMediaViewOpened: (value: boolean) => void;
 }
 
 const ConversationSettings: FC<ConversationConfigProps> = ({
   conversation,
   setIsOpened,
+  setMediaViewOpened,
 }) => {
   const { id: conversationId } = useParams();
 
@@ -193,6 +195,16 @@ const ConversationSettings: FC<ConversationConfigProps> = ({
               ))}
             </div>
           )}
+          <button
+            onClick={() => {
+              setIsOpened(false);
+              setMediaViewOpened(true);
+            }}
+            className="flex items-center px-3 py-2 gap-3 rounded-lg hover:brightness-125 bg-dark transition duration-300"
+          >
+            <i className="bx bxs-file text-2xl"></i>
+            <span>View images & files</span>
+          </button>
         </div>
       </div>
     </div>

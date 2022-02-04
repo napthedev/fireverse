@@ -1,0 +1,63 @@
+import { FC, useState } from "react";
+import { collection, query, where } from "firebase/firestore";
+
+import FileIcon from "../FileIcon";
+import ImageView from "../ImageView";
+import Spin from "react-cssfx-loading/src/Spin";
+import { db } from "../../shared/firebase";
+import { formatFileSize } from "../../shared/utils";
+import { useCollectionQuery } from "../../hooks/useCollectionQuery";
+import { useParams } from "react-router-dom";
+
+const Files: FC = () => {
+  const { id: conversationId } = useParams();
+
+  const { data, loading, error } = useCollectionQuery(
+    `files-${conversationId}`,
+    query(
+      collection(db, "conversations", conversationId as string, "messages"),
+      where("type", "==", "file")
+    )
+  );
+
+  if (loading || error)
+    return (
+      <div className="h-80 flex justify-center items-center">
+        <Spin />
+      </div>
+    );
+
+  if (data?.empty)
+    return (
+      <div className="h-80 py-3">
+        <p className="text-center">No file found</p>
+      </div>
+    );
+
+  return (
+    <div className="h-80 overflow-y-auto flex flex-col items-stretch gap-3 p-4">
+      {data?.docs.map((file) => (
+        <div className="flex p-2 gap-4 items-center">
+          <FileIcon
+            className="w-6 h-6 object-cover"
+            extension={file.data().file.name.split(".").slice(-1)[0]}
+          />
+          <div className="flex-grow">
+            <h1>{file.data()?.file?.name}</h1>
+            <p>{formatFileSize(file.data()?.file?.size)}</p>
+          </div>
+          <a
+            href={file.data().content}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-shrink-0"
+          >
+            <i className="bx bxs-download text-2xl"></i>
+          </a>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default Files;

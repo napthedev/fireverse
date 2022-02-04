@@ -5,6 +5,7 @@ import { formatDate, formatFileSize } from "../../shared/utils";
 import AvatarFromId from "../Chat/AvatarFromId";
 import ClickAwayListener from "../ClickAwayListener";
 import { EMOJI_REGEX } from "../../shared/constants";
+import FileIcon from "../FileIcon";
 import ImageView from "../ImageView";
 import ReactionPopup from "../Chat/ReactionPopup";
 import ReactionStatus from "../Chat/ReactionStatus";
@@ -117,6 +118,10 @@ const LeftMessage: FC<LeftMessageProps> = ({
             title={formattedDate}
             className="bg-dark-lighten flex items-center gap-2 rounded-lg overflow-hidden py-3 px-5"
           >
+            <FileIcon
+              className="w-4 h-4 object-cover"
+              extension={message.file?.name.split(".").slice(-1)[0] as string}
+            />
             <div>
               <p className="max-w-[100px] overflow-hidden text-ellipsis whitespace-nowrap">
                 {message.file?.name}
