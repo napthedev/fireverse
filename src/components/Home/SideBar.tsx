@@ -7,7 +7,6 @@ import ClickAwayListener from "../ClickAwayListener";
 import { ConversationInfo } from "../../shared/types";
 import CreateConversation from "./CreateConversation";
 import SelectConversation from "./SelectConversation";
-import Skeleton from "../Skeleton";
 import Spin from "react-cssfx-loading/src/Spin";
 import UserInfo from "./UserInfo";
 import { auth } from "../../shared/firebase";
@@ -44,7 +43,7 @@ const SideBar: FC = () => {
             : "w-full md:!w-[350px]"
         }`}
       >
-        <div className="flex justify-between h-20 items-center px-6">
+        <div className="flex justify-between h-20 items-center px-6 border-b border-dark-lighten">
           <Link to="/" className="flex items-center gap-1">
             <img className="w-8 h-8" src="/icon.svg" alt="" />
             <h1 className="text-xl">FireVerse</h1>
@@ -101,16 +100,6 @@ const SideBar: FC = () => {
               )}
             </ClickAwayListener>
           </div>
-        </div>
-        <div className="relative h-10 mx-5 mb-5">
-          <button className="absolute top-1/2 -translate-y-1/2 left-2">
-            <i className="bx bx-search text-xl text-gray-400"></i>
-          </button>
-          <input
-            className="outline-none bg-dark-lighten h-full w-full rounded-md pl-8 pr-3"
-            type="text"
-            placeholder="Search for users, conversations..."
-          />
         </div>
 
         {loading ? (
