@@ -1,8 +1,7 @@
 import { FC, useState } from "react";
-import { collection, query, where } from "firebase/firestore";
+import { collection, orderBy, query, where } from "firebase/firestore";
 
 import FileIcon from "../FileIcon";
-import ImageView from "../ImageView";
 import Spin from "react-cssfx-loading/src/Spin";
 import { db } from "../../shared/firebase";
 import { formatFileSize } from "../../shared/utils";
@@ -16,7 +15,8 @@ const Files: FC = () => {
     `files-${conversationId}`,
     query(
       collection(db, "conversations", conversationId as string, "messages"),
-      where("type", "==", "file")
+      where("type", "==", "file"),
+      orderBy("createdAt", "desc")
     )
   );
 
@@ -37,7 +37,7 @@ const Files: FC = () => {
   return (
     <div className="h-80 overflow-y-auto flex flex-col items-stretch gap-3 p-4">
       {data?.docs.map((file) => (
-        <div className="flex p-2 gap-4 items-center">
+        <div key={file.id} className="flex p-2 gap-4 items-center">
           <FileIcon
             className="w-6 h-6 object-cover"
             extension={file.data().file.name.split(".").slice(-1)[0]}

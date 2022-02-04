@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { collection, query, where } from "firebase/firestore";
+import { collection, orderBy, query, where } from "firebase/firestore";
 
 import ImageView from "../ImageView";
 import Spin from "react-cssfx-loading/src/Spin";
@@ -34,7 +34,8 @@ const Image: FC = () => {
     `images-${conversationId}`,
     query(
       collection(db, "conversations", conversationId as string, "messages"),
-      where("type", "==", "image")
+      where("type", "==", "image"),
+      orderBy("createdAt", "desc")
     )
   );
 
