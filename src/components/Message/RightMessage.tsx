@@ -4,12 +4,12 @@ import { formatDate, formatFileSize } from "../../shared/utils";
 
 import ClickAwayListener from "../ClickAwayListener";
 import { EMOJI_REGEX } from "../../shared/constants";
-import ImageView from "./ImageView";
+import ImageView from "../ImageView";
 import { MessageItem } from "../../shared/types";
-import ReactionPopup from "./ReactionPopup";
-import ReactionStatus from "./ReactionStatus";
-import ReplyBadge from "./ReplyBadge";
-import ReplyIcon from "./ReplyIcon";
+import ReactionPopup from "../Chat/ReactionPopup";
+import ReactionStatus from "../Chat/ReactionStatus";
+import ReplyBadge from "../Chat/ReplyBadge";
+import ReplyIcon from "../Chat/ReplyIcon";
 import SpriteRenderer from "../SpriteRenderer";
 import { db } from "../../shared/firebase";
 import { useParams } from "react-router-dom";

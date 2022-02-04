@@ -5,6 +5,7 @@ import ConversationSettings from "./ConversationSettings";
 import { IMAGE_PROXY } from "../../shared/constants";
 import { Link } from "react-router-dom";
 import Skeleton from "../Skeleton";
+import ViewGroup from "../Group/ViewGroup";
 import { useStore } from "../../store";
 import { useUsersInfo } from "../../hooks/useUsersInfo";
 
@@ -20,6 +21,7 @@ const ChatHeader: FC<ChatHeaderProps> = ({ conversation }) => {
 
   const [isConversationSettingsOpened, setIsConversationSettingsOpened] =
     useState(false);
+  const [isGroupMembersOpened, setIsGroupMembersOpened] = useState(false);
 
   return (
     <>
@@ -69,24 +71,41 @@ const ChatHeader: FC<ChatHeaderProps> = ({ conversation }) => {
             <Skeleton className="h-6 w-1/4" />
           ) : (
             <p>
-              {conversation?.group?.groupName ||
-                filtered?.map((user) => user.data()?.displayName).join(", ")}
+              {conversation.users.length > 2 && conversation?.group?.groupName
+                ? conversation.group.groupName
+                : filtered?.map((user) => user.data()?.displayName).join(", ")}
             </p>
           )}
         </div>
 
         {!loading && (
-          <button onClick={() => setIsConversationSettingsOpened(true)}>
-            <i className="bx bxs-info-circle text-2xl text-primary"></i>
-          </button>
+          <>
+            {conversation.users.length > 2 && (
+              <button onClick={() => setIsGroupMembersOpened(true)}>
+                <i className="bx bxs-group text-2xl text-primary"></i>
+              </button>
+            )}
+
+            <button onClick={() => setIsConversationSettingsOpened(true)}>
+              <i className="bx bxs-info-circle text-2xl text-primary"></i>
+            </button>
+          </>
         )}
       </div>
 
-      <ConversationSettings
-        isOpened={isConversationSettingsOpened}
-        setIsOpened={setIsConversationSettingsOpened}
-        conversation={conversation}
-      />
+      {isConversationSettingsOpened && (
+        <ConversationSettings
+          setIsOpened={setIsConversationSettingsOpened}
+          conversation={conversation}
+        />
+      )}
+
+      {isGroupMembersOpened && (
+        <ViewGroup
+          setIsOpened={setIsGroupMembersOpened}
+          conversation={conversation}
+        />
+      )}
     </>
   );
 };

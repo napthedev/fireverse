@@ -11,13 +11,11 @@ import { useParams } from "react-router-dom";
 
 interface ConversationConfigProps {
   conversation: ConversationInfo;
-  isOpened: boolean;
   setIsOpened: (value: boolean) => void;
 }
 
 const ConversationSettings: FC<ConversationConfigProps> = ({
   conversation,
-  isOpened,
   setIsOpened,
 }) => {
   const { id: conversationId } = useParams();
@@ -83,9 +81,7 @@ const ConversationSettings: FC<ConversationConfigProps> = ({
   return (
     <div
       onClick={() => setIsOpened(false)}
-      className={`fixed top-0 left-0 w-full h-full bg-[#00000080] z-20 flex justify-center items-center transition-all duration-300 ${
-        isOpened ? "opacity-100 visible" : "opacity-0 invisible"
-      }`}
+      className={`fixed top-0 left-0 w-full h-full bg-[#00000080] z-20 flex justify-center items-center transition-all duration-300 animate-fade-in`}
     >
       <div
         onClick={(e) => e.stopPropagation()}

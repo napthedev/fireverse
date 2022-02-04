@@ -8,6 +8,7 @@ import { ConversationInfo } from "../../shared/types";
 import CreateConversation from "./CreateConversation";
 import SelectConversation from "./SelectConversation";
 import Skeleton from "../Skeleton";
+import Spin from "react-cssfx-loading/src/Spin";
 import UserInfo from "./UserInfo";
 import { auth } from "../../shared/firebase";
 import { db } from "../../shared/firebase";
@@ -113,19 +114,11 @@ const SideBar: FC = () => {
         </div>
 
         {loading ? (
-          <div>
-            {[...new Array(20)].map((_, index) => (
-              <div key={index} className="flex items-stretch py-2 px-5 gap-2">
-                <Skeleton className="w-14 h-14 rounded-full flex-shrink-0" />
-                <div className="flex-grow flex flex-col items-start py-2 gap-2">
-                  <Skeleton className="w-1/2 flex-grow" />
-                  <Skeleton className="w-2/3 flex-grow" />
-                </div>
-              </div>
-            ))}
+          <div className="flex justify-center items-center">
+            <Spin />
           </div>
         ) : data?.empty ? (
-          <div className="flex-grow flex flex-col justify-center items-center">
+          <div className="flex flex-col justify-center items-center">
             <p className="text-center">No conversation found</p>
             <button
               onClick={() => setCreateConversationOpened(true)}

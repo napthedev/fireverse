@@ -3,7 +3,7 @@ import { FC, useEffect, useState } from "react";
 import ChatHeader from "../components/Chat/ChatHeader";
 import ChatView from "../components/Chat/ChatView";
 import { ConversationInfo } from "../shared/types";
-import InputSection from "../components/Chat/InputSection";
+import InputSection from "../components/Input/InputSection";
 import SideBar from "../components/Home/SideBar";
 import { db } from "../shared/firebase";
 import { doc } from "firebase/firestore";

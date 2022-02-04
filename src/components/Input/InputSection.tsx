@@ -22,7 +22,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import Alert from "../Alert";
 import ClickAwayListener from "../ClickAwayListener";
 import { EMOJI_REPLACEMENT } from "../../shared/constants";
-import ReplyIcon from "./ReplyIcon";
+import ReplyIcon from "../Chat/ReplyIcon";
 import Spin from "react-cssfx-loading/src/Spin";
 import StickerPicker from "./StickerPicker";
 import { formatFileName } from "../../shared/utils";

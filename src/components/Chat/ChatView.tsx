@@ -11,8 +11,8 @@ import {
 
 import AvatarFromId from "./AvatarFromId";
 import InfiniteScroll from "react-infinite-scroll-component";
-import LeftMessage from "./LeftMessage";
-import RightMessage from "./RightMessage";
+import LeftMessage from "../Message/LeftMessage";
+import RightMessage from "../Message/RightMessage";
 import Spin from "react-cssfx-loading/src/Spin";
 import { db } from "../../shared/firebase";
 import { useCollectionQuery } from "../../hooks/useCollectionQuery";

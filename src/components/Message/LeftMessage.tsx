@@ -2,14 +2,14 @@ import { ConversationInfo, MessageItem } from "../../shared/types";
 import { FC, useState } from "react";
 import { formatDate, formatFileSize } from "../../shared/utils";
 
-import AvatarFromId from "./AvatarFromId";
+import AvatarFromId from "../Chat/AvatarFromId";
 import ClickAwayListener from "../ClickAwayListener";
 import { EMOJI_REGEX } from "../../shared/constants";
-import ImageView from "./ImageView";
-import ReactionPopup from "./ReactionPopup";
-import ReactionStatus from "./ReactionStatus";
-import ReplyBadge from "./ReplyBadge";
-import ReplyIcon from "./ReplyIcon";
+import ImageView from "../ImageView";
+import ReactionPopup from "../Chat/ReactionPopup";
+import ReactionStatus from "../Chat/ReactionStatus";
+import ReplyBadge from "../Chat/ReplyBadge";
+import ReplyIcon from "../Chat/ReplyIcon";
 import SpriteRenderer from "../SpriteRenderer";
 import { useStore } from "../../store";
 
