@@ -24,17 +24,26 @@ const Members: FC<MembersProps> = ({ conversation }) => {
   const navigate = useNavigate();
 
   const [isAlertOpened, setIsAlertOpened] = useState(false);
+  const [alertText, setAlertText] = useState("");
 
   const handleRemoveFromGroup = (uid: string) => {
-    updateDoc(doc(db, "conversations", conversationId as string), {
-      users: arrayRemove(uid),
-      "group.admins": arrayRemove(uid),
-      "group.groupImage": conversation.group?.groupImage,
-      "group.groupName": conversation.group?.groupName,
-    });
+    if (
+      conversation.group?.admins.length === 1 &&
+      conversation.group.admins[0] === uid
+    ) {
+      setAlertText("You must set another one to be an admin");
+      setIsAlertOpened(true);
+    } else {
+      updateDoc(doc(db, "conversations", conversationId as string), {
+        users: arrayRemove(uid),
+        "group.admins": arrayRemove(uid),
+        "group.groupImage": conversation.group?.groupImage,
+        "group.groupName": conversation.group?.groupName,
+      });
 
-    if (currentUser?.uid === uid) {
-      navigate("/");
+      if (currentUser?.uid === uid) {
+        navigate("/");
+      }
     }
   };
 
@@ -45,6 +54,7 @@ const Members: FC<MembersProps> = ({ conversation }) => {
       "group.groupName": conversation.group?.groupName,
     });
     setIsAlertOpened(true);
+    setAlertText("Done making an admin");
   };
 
   if (loading || error)
@@ -112,7 +122,7 @@ const Members: FC<MembersProps> = ({ conversation }) => {
       <Alert
         isOpened={isAlertOpened}
         setIsOpened={setIsAlertOpened}
-        text="Done making an admin"
+        text={alertText}
       />
     </>
   );

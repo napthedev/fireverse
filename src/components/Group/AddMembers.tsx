@@ -59,6 +59,7 @@ const AddMembers: FC<AddMembersProps> = ({ conversations }) => {
             </button>
           </div>
         ))}
+      {data?.empty && <p className="text-center">No more user to add</p>}
     </div>
   );
 };
