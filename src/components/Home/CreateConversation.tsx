@@ -112,6 +112,10 @@ const CreateConversation: FC<CreateConversationProps> = ({ setIsOpened }) => {
           <div className="flex justify-center items-center h-96">
             <Spin color="#0D90F3" />
           </div>
+        ) : error ? (
+          <div className="flex justify-center items-center h-96">
+            <p className="text-center">Something went wrong</p>
+          </div>
         ) : (
           <>
             {isCreating && (

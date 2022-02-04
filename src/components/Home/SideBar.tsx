@@ -103,8 +103,12 @@ const SideBar: FC = () => {
         </div>
 
         {loading ? (
-          <div className="flex justify-center items-center">
+          <div className="flex justify-center">
             <Spin />
+          </div>
+        ) : error ? (
+          <div>
+            <p className="text-center">Something went wrong</p>
           </div>
         ) : data?.empty ? (
           <div className="flex flex-col justify-center items-center">

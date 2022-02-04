@@ -1,5 +1,6 @@
+import { DEFAULT_AVATAR, IMAGE_PROXY } from "../../shared/constants";
+
 import { FC } from "react";
-import { IMAGE_PROXY } from "../../shared/constants";
 import Skeleton from "../Skeleton";
 import { useUsersInfo } from "../../hooks/useUsersInfo";
 
@@ -17,6 +18,15 @@ const AvatarFromId: FC<AvatarFromIdProps> = ({ uid, size = 30 }) => {
         className="rounded-full"
         style={{ width: size, height: size }}
       ></Skeleton>
+    );
+
+  if (error)
+    return (
+      <img
+        src={DEFAULT_AVATAR}
+        className="rounded-full"
+        style={{ width: size, height: size }}
+      />
     );
 
   return (

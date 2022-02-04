@@ -110,6 +110,13 @@ const ChatView: FC<ChatViewProps> = ({
       </div>
     );
 
+  if (error)
+    return (
+      <div className="flex-grow">
+        <p className="text-center text-gray-400 mt-4">Something went wrong</p>
+      </div>
+    );
+
   if (data?.empty)
     return (
       <div className="flex-grow">
