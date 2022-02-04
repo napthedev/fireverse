@@ -1,6 +1,10 @@
 import { FC, useState } from "react";
 import { doc, updateDoc } from "firebase/firestore";
-import { formatDate, formatFileSize } from "../../shared/utils";
+import {
+  formatDate,
+  formatFileSize,
+  splitLinkFromMessage,
+} from "../../shared/utils";
 
 import ClickAwayListener from "../ClickAwayListener";
 import { EMOJI_REGEX } from "../../shared/constants";
@@ -80,7 +84,22 @@ const RightMessage: FC<RightMessageProps> = ({ message, setReplyInfo }) => {
                 title={formattedDate}
                 className={`bg-primary text-white p-2 rounded-lg relative after:absolute after:left-full after:bottom-[6px] after:border-8 after:border-primary after:border-t-transparent after:border-r-transparent`}
               >
-                {message.content}
+                {splitLinkFromMessage(message.content).map((item) => (
+                  <>
+                    {typeof item === "string" ? (
+                      <span>{item}</span>
+                    ) : (
+                      <a
+                        className="inline mx-1 underline"
+                        href={item.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {item.link}
+                      </a>
+                    )}
+                  </>
+                ))}
               </div>
             )}
           </>

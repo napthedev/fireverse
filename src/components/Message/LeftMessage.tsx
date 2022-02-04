@@ -1,6 +1,10 @@
 import { ConversationInfo, MessageItem } from "../../shared/types";
 import { FC, useState } from "react";
-import { formatDate, formatFileSize } from "../../shared/utils";
+import {
+  formatDate,
+  formatFileSize,
+  splitLinkFromMessage,
+} from "../../shared/utils";
 
 import AvatarFromId from "../Chat/AvatarFromId";
 import ClickAwayListener from "../ClickAwayListener";
@@ -90,7 +94,22 @@ const LeftMessage: FC<LeftMessageProps> = ({
                     : ""
                 }`}
               >
-                {message.content}
+                {splitLinkFromMessage(message.content).map((item) => (
+                  <>
+                    {typeof item === "string" ? (
+                      <span>{item}</span>
+                    ) : (
+                      <a
+                        className="inline mx-1 underline"
+                        href={item.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {item.link}
+                      </a>
+                    )}
+                  </>
+                ))}
               </div>
             )}
           </>
