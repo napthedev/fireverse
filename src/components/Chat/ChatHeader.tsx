@@ -75,7 +75,10 @@ const ChatHeader: FC<ChatHeaderProps> = ({ conversation }) => {
             <p>
               {conversation.users.length > 2 && conversation?.group?.groupName
                 ? conversation.group.groupName
-                : filtered?.map((user) => user.data()?.displayName).join(", ")}
+                : filtered
+                    ?.map((user) => user.data()?.displayName)
+                    .slice(0, 3)
+                    .join(", ")}
             </p>
           )}
         </div>
