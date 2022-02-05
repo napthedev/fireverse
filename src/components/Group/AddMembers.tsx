@@ -24,7 +24,10 @@ const AddMembers: FC<AddMembersProps> = ({ conversations }) => {
 
   const { data, loading, error } = useCollectionQuery(
     `all-users-except-${JSON.stringify(conversations.users)}`,
-    query(collection(db, "users"), where("uid", "not-in", conversations.users))
+    query(
+      collection(db, "users"),
+      where("uid", "not-in", conversations.users.slice(0, 10))
+    )
   );
 
   const handleAddMember = (uid: string) => {
