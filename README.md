@@ -29,8 +29,9 @@ Official Website: [https://fireverse.pages.dev](https://fireverse.pages.dev)
   - Image
   - File
   - Stickers (from zalo)
-  - Gif (from giphy)
+  - Gif (from giph
   - Emoji (emoji-mart)
+- Show if user has seen message
 - Drop file to upload
 - Paste image from clipboard
 - Send reactions to message (like, love, care, haha, wow, sad, angry)
@@ -40,6 +41,7 @@ Official Website: [https://fireverse.pages.dev](https://fireverse.pages.dev)
   - Change group theme, image
   - Change theme
 - View conversation images, files
+- Detect link an add an anchor to it
 
 ## Installation
 
