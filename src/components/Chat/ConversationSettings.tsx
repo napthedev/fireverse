@@ -1,13 +1,14 @@
 import { ChangeEvent, FC, FormEvent, useRef, useState } from "react";
+import { arrayRemove, doc, updateDoc } from "firebase/firestore";
 import { db, storage } from "../../shared/firebase";
-import { doc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { useNavigate, useParams } from "react-router-dom";
 
 import Alert from "../Alert";
 import { ConversationInfo } from "../../shared/types";
 import { THEMES } from "../../shared/constants";
 import { formatFileName } from "../../shared/utils";
-import { useParams } from "react-router-dom";
+import { useStore } from "../../store";
 
 interface ConversationConfigProps {
   conversation: ConversationInfo;
@@ -21,6 +22,10 @@ const ConversationSettings: FC<ConversationConfigProps> = ({
   setMediaViewOpened,
 }) => {
   const { id: conversationId } = useParams();
+
+  const currentUser = useStore((state) => state.currentUser);
+
+  const navigate = useNavigate();
 
   const [isChangeChatNameOpened, setIsChangeChatNameOpened] = useState(false);
   const [chatNameInputValue, setChatNameInputValue] = useState(
@@ -78,6 +83,17 @@ const ConversationSettings: FC<ConversationConfigProps> = ({
     updateDoc(doc(db, "conversations", conversationId as string), {
       theme: value,
     });
+  };
+
+  const leaveGroup = () => {
+    updateDoc(doc(db, "conversations", conversationId as string), {
+      users: arrayRemove(currentUser?.uid as string),
+      "group.admins": arrayRemove(currentUser?.uid as string),
+      "group.groupImage": conversation.group?.groupImage,
+      "group.groupName": conversation.group?.groupName,
+    });
+
+    navigate("/");
   };
 
   return (
@@ -205,6 +221,18 @@ const ConversationSettings: FC<ConversationConfigProps> = ({
             <i className="bx bxs-file text-2xl"></i>
             <span>View images & files</span>
           </button>
+
+          {conversation.users.length > 2 && (
+            <button
+              onClick={() => leaveGroup()}
+              className="bg-dark flex items-center justify-between gap-3 rounded-lg px-3 py-2 transition duration-300 hover:brightness-125"
+            >
+              <div className="flex items-center gap-3">
+                <i className="bx bx-log-out text-2xl"></i>
+                <span>Leave group</span>
+              </div>
+            </button>
+          )}
         </div>
       </div>
     </div>

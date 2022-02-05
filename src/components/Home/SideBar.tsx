@@ -103,15 +103,15 @@ const SideBar: FC = () => {
         </div>
 
         {loading ? (
-          <div className="flex justify-center">
+          <div className="my-6 flex justify-center">
             <Spin />
           </div>
         ) : error ? (
-          <div>
+          <div className="my-6 flex justify-center">
             <p className="text-center">Something went wrong</p>
           </div>
         ) : data?.empty ? (
-          <div className="flex flex-col items-center justify-center">
+          <div className="my-6 flex flex-col items-center justify-center">
             <p className="text-center">No conversation found</p>
             <button
               onClick={() => setCreateConversationOpened(true)}
