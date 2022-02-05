@@ -49,7 +49,7 @@ const SignIn: FC = () => {
               <span className="text-2xl">FireVerse</span>
             </div>
             <a
-              href="https://github.com/napthedev"
+              href="https://github.com/napthedev/fireverse"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1 text-xl"
