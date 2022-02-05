@@ -22,8 +22,11 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import Alert from "../Alert";
 import ClickAwayListener from "../ClickAwayListener";
 import { EMOJI_REPLACEMENT } from "../../shared/constants";
-import ReplyIcon from "../Chat/ReplyIcon";
+import GifIcon from "../Icon/GifIcon";
+import GifPicker from "./GifPicker";
+import ReplyIcon from "../Icon/ReplyIcon";
 import Spin from "react-cssfx-loading/src/Spin";
+import StickerIcon from "../Icon/StickerIcon";
 import StickerPicker from "./StickerPicker";
 import { formatFileName } from "../../shared/utils";
 import { useParams } from "react-router-dom";
@@ -52,6 +55,7 @@ const InputSection: FC<InputSectionProps> = ({
 
   const [isStickerPickerOpened, setIsStickerPickerOpened] = useState(false);
   const [isIconPickerOpened, setIsIconPickerOpened] = useState(false);
+  const [isGifPickerOpened, setIsGifPickerOpened] = useState(false);
 
   const [isAlertOpened, setIsAlertOpened] = useState(false);
   const [alertText, setAlertText] = useState("");
@@ -230,6 +234,19 @@ const InputSection: FC<InputSectionProps> = ({
     }
   };
 
+  const sendGif = (url: string) => {
+    addDoc(
+      collection(db, "conversations", conversationId as string, "messages"),
+      {
+        sender: currentUser?.uid,
+        content: url,
+        type: "image",
+        file: null,
+        createdAt: serverTimestamp(),
+      }
+    );
+  };
+
   useEffect(() => {
     if (!setInputSectionOffset) return;
     if (previewFiles.length > 0) return setInputSectionOffset(128);
@@ -397,30 +414,20 @@ const InputSection: FC<InputSectionProps> = ({
             onClick={() => setIsStickerPickerOpened(true)}
             className="flex items-center"
           >
-            <svg
-              className="w-[26px] h-[22px] object-contain text-primary"
-              version="1.1"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 512 512"
-              fill="currentColor"
-            >
-              <g>
-                <path
-                  d="M414.773,44.763H97.227C43.616,44.763,0,88.38,0,141.992v228.016c0,53.612,43.616,97.229,97.227,97.229h317.545
-			c53.612,0,97.227-43.617,97.227-97.229V141.992C512,88.38,468.384,44.763,414.773,44.763z M214.73,325.581
-			c-16.078,19.633-37.726,30.445-60.958,30.445c-23.232,0-44.88-10.812-60.958-30.445c-15.335-18.725-23.78-43.437-23.78-69.58
-			c0-26.144,8.446-50.855,23.78-69.58c16.078-19.633,37.726-30.446,60.958-30.446c24.375,0,47.563,12.336,63.614,33.842
-			c5.156,6.909,3.736,16.69-3.173,21.845c-6.91,5.156-16.689,3.736-21.846-3.173c-10.25-13.733-23.956-21.296-38.596-21.296
-			c-29.51,0-53.519,30.867-53.519,68.807s24.008,68.807,53.519,68.807c25.335,0,46.616-22.752,52.13-53.198h-21.388
-			c-8.621,0-15.609-6.989-15.609-15.609c0-8.621,6.989-15.609,15.609-15.609h38.386c8.621,0,15.609,6.989,15.609,15.609
-			C238.51,282.143,230.064,306.855,214.73,325.581z M302.102,340.416c0,8.62-6.989,15.609-15.609,15.609
-			c-8.621,0-15.609-6.989-15.609-15.609V171.583c0-8.621,6.989-15.609,15.609-15.609c8.62,0,15.609,6.989,15.609,15.609V340.416z
-			 M427.356,220.45c8.62,0,15.609,6.989,15.609,15.609c0,8.62-6.989,15.609-15.609,15.609h-61.661v88.747
-			c0,8.621-6.989,15.609-15.609,15.609c-8.62,0-15.609-6.989-15.609-15.609V171.583c0-8.621,6.989-15.609,15.609-15.609h77.27
-			c8.62,0,15.609,6.989,15.609,15.609c0,8.62-6.989,15.609-15.609,15.609h-61.661v33.257H427.356z"
-                />
-              </g>
-            </svg>
+            <StickerIcon />
+          </button>
+        </div>
+
+        <div className="flex-shrink-0 flex items-center relative">
+          {isGifPickerOpened && (
+            <GifPicker setIsOpened={setIsGifPickerOpened} onSelect={sendGif} />
+          )}
+
+          <button
+            onClick={() => setIsGifPickerOpened(true)}
+            className="flex items-center"
+          >
+            <GifIcon />
           </button>
         </div>
 

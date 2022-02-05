@@ -1,7 +1,6 @@
-import { FC, useState } from "react";
+import { FC, Fragment, useState } from "react";
 
 import ClickAwayListener from "../ClickAwayListener";
-import { InView } from "react-intersection-observer";
 import { STICKERS_URL } from "../../shared/constants";
 import Spin from "react-cssfx-loading/src/Spin";
 import SpriteRenderer from "../SpriteRenderer";
@@ -77,34 +76,27 @@ const StickerPicker: FC<StickerPickerOpened> = ({ setIsOpened, onSelect }) => {
                 )}
 
                 {data?.map((collection) => (
-                  <>
+                  <Fragment key={collection.id}>
                     <h1 className="mt-2" id={`sticker-${collection.id}`}>
                       {collection.name}
                     </h1>
                     <div className="w-full grid grid-cols-5 justify-between">
                       {collection.stickers.map((sticker) => (
-                        <InView key={sticker.spriteURL} rootMargin="-100px">
-                          {({ inView, ref }) => (
-                            <div className="w-[60px] h-[60px]" ref={ref}>
-                              {inView && (
-                                <SpriteRenderer
-                                  size={60}
-                                  onClick={() => {
-                                    onSelect(sticker.spriteURL);
-                                    addRecentSticker(sticker.spriteURL);
-                                    setIsOpened(false);
-                                  }}
-                                  className="hover:bg-dark-lighten cursor-pointer"
-                                  src={sticker.spriteURL}
-                                  runOnHover
-                                />
-                              )}
-                            </div>
-                          )}
-                        </InView>
+                        <SpriteRenderer
+                          key={sticker.spriteURL}
+                          size={60}
+                          onClick={() => {
+                            onSelect(sticker.spriteURL);
+                            addRecentSticker(sticker.spriteURL);
+                            setIsOpened(false);
+                          }}
+                          className="hover:bg-dark-lighten cursor-pointer"
+                          src={sticker.spriteURL}
+                          runOnHover
+                        />
                       ))}
                     </div>
-                  </>
+                  </Fragment>
                 ))}
               </div>
 

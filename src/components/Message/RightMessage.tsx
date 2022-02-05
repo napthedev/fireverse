@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, Fragment, useState } from "react";
 import { doc, updateDoc } from "firebase/firestore";
 import {
   formatDate,
@@ -14,7 +14,7 @@ import { MessageItem } from "../../shared/types";
 import ReactionPopup from "../Chat/ReactionPopup";
 import ReactionStatus from "../Chat/ReactionStatus";
 import ReplyBadge from "../Chat/ReplyBadge";
-import ReplyIcon from "../Chat/ReplyIcon";
+import ReplyIcon from "../Icon/ReplyIcon";
 import SpriteRenderer from "../SpriteRenderer";
 import { db } from "../../shared/firebase";
 import { useParams } from "react-router-dom";
@@ -84,8 +84,8 @@ const RightMessage: FC<RightMessageProps> = ({ message, setReplyInfo }) => {
                 title={formattedDate}
                 className={`bg-primary text-white p-2 rounded-lg relative after:absolute after:left-full after:bottom-[6px] after:border-8 after:border-primary after:border-t-transparent after:border-r-transparent`}
               >
-                {splitLinkFromMessage(message.content).map((item) => (
-                  <>
+                {splitLinkFromMessage(message.content).map((item, index) => (
+                  <Fragment key={index}>
                     {typeof item === "string" ? (
                       <span>{item}</span>
                     ) : (
@@ -98,7 +98,7 @@ const RightMessage: FC<RightMessageProps> = ({ message, setReplyInfo }) => {
                         {item.link}
                       </a>
                     )}
-                  </>
+                  </Fragment>
                 ))}
               </div>
             )}

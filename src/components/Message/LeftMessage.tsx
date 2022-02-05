@@ -1,5 +1,5 @@
 import { ConversationInfo, MessageItem } from "../../shared/types";
-import { FC, useState } from "react";
+import { FC, Fragment, useState } from "react";
 import {
   formatDate,
   formatFileSize,
@@ -14,7 +14,7 @@ import ImageView from "../ImageView";
 import ReactionPopup from "../Chat/ReactionPopup";
 import ReactionStatus from "../Chat/ReactionStatus";
 import ReplyBadge from "../Chat/ReplyBadge";
-import ReplyIcon from "../Chat/ReplyIcon";
+import ReplyIcon from "../Icon/ReplyIcon";
 import SpriteRenderer from "../SpriteRenderer";
 import { useStore } from "../../store";
 
@@ -94,8 +94,8 @@ const LeftMessage: FC<LeftMessageProps> = ({
                     : ""
                 }`}
               >
-                {splitLinkFromMessage(message.content).map((item) => (
-                  <>
+                {splitLinkFromMessage(message.content).map((item, index) => (
+                  <Fragment key={index}>
                     {typeof item === "string" ? (
                       <span>{item}</span>
                     ) : (
@@ -108,7 +108,7 @@ const LeftMessage: FC<LeftMessageProps> = ({
                         {item.link}
                       </a>
                     )}
-                  </>
+                  </Fragment>
                 ))}
               </div>
             )}
