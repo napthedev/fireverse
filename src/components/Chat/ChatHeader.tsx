@@ -27,13 +27,13 @@ const ChatHeader: FC<ChatHeaderProps> = ({ conversation }) => {
 
   return (
     <>
-      <div className="h-20 flex items-center justify-between px-5 border-b border-dark-lighten">
-        <div className="flex items-center gap-3 flex-grow">
+      <div className="border-dark-lighten flex h-20 items-center justify-between border-b px-5">
+        <div className="flex flex-grow items-center gap-3">
           <Link to="/" className="md:hidden">
-            <i className="bx bxs-chevron-left text-3xl text-primary"></i>
+            <i className="bx bxs-chevron-left text-primary text-3xl"></i>
           </Link>
           {loading ? (
-            <Skeleton className="w-10 h-10 rounded-full" />
+            <Skeleton className="h-10 w-10 rounded-full" />
           ) : (
             <>
               {conversation.users.length === 2 ? (
@@ -46,19 +46,19 @@ const ChatHeader: FC<ChatHeaderProps> = ({ conversation }) => {
                 <>
                   {conversation?.group?.groupImage ? (
                     <img
-                      className="w-10 h-10 rounded-full flex-shrink-0 object-cover"
+                      className="h-10 w-10 flex-shrink-0 rounded-full object-cover"
                       src={conversation.group.groupImage}
                       alt=""
                     />
                   ) : (
-                    <div className="h-10 w-10 relative flex-shrink-0">
+                    <div className="relative h-10 w-10 flex-shrink-0">
                       <img
-                        className="w-7 h-7 rounded-full flex-shrink-0 object-cover absolute top-0 right-0"
+                        className="absolute top-0 right-0 h-7 w-7 flex-shrink-0 rounded-full object-cover"
                         src={IMAGE_PROXY(filtered?.[0]?.data()?.photoURL)}
                         alt=""
                       />
                       <img
-                        className={`w-7 h-7 rounded-full flex-shrink-0 object-cover absolute bottom-0 left-0 z-[1] border-2 border-dark transition duration-300`}
+                        className={`border-dark absolute bottom-0 left-0 z-[1] h-7 w-7 flex-shrink-0 rounded-full border-2 object-cover transition duration-300`}
                         src={IMAGE_PROXY(filtered?.[1]?.data()?.photoURL)}
                         alt=""
                       />
@@ -84,12 +84,12 @@ const ChatHeader: FC<ChatHeaderProps> = ({ conversation }) => {
           <>
             {conversation.users.length > 2 && (
               <button onClick={() => setIsGroupMembersOpened(true)}>
-                <i className="bx bxs-group text-2xl text-primary"></i>
+                <i className="bx bxs-group text-primary text-2xl"></i>
               </button>
             )}
 
             <button onClick={() => setIsConversationSettingsOpened(true)}>
-              <i className="bx bxs-info-circle text-2xl text-primary"></i>
+              <i className="bx bxs-info-circle text-primary text-2xl"></i>
             </button>
           </>
         )}

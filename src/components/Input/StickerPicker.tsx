@@ -43,21 +43,21 @@ const StickerPicker: FC<StickerPickerOpened> = ({ setIsOpened, onSelect }) => {
       {(ref) => (
         <div
           ref={ref}
-          className="absolute -left-16 bottom-full bg-[#222222] border-dark-lighten border-2 shadow-2xl rounded-lg w-96 h-96"
+          className="border-dark-lighten absolute -left-16 bottom-full h-96 w-96 rounded-lg border-2 bg-[#222222] shadow-2xl"
         >
           {loading || error ? (
-            <div className="w-full h-full flex items-center justify-center">
+            <div className="flex h-full w-full items-center justify-center">
               <Spin />
             </div>
           ) : (
-            <div className="w-full h-full flex flex-col">
+            <div className="flex h-full w-full flex-col">
               <div className="flex-grow overflow-y-auto p-3 pt-1">
                 {recentStickers.length > 0 && (
                   <>
                     <h1 className="mt-2" id="sticker-recent">
                       Recent stickers
                     </h1>
-                    <div className="w-full grid grid-cols-5 justify-between">
+                    <div className="grid w-full grid-cols-5 justify-between">
                       {recentStickers.map((url) => (
                         <SpriteRenderer
                           size={60}
@@ -80,7 +80,7 @@ const StickerPicker: FC<StickerPickerOpened> = ({ setIsOpened, onSelect }) => {
                     <h1 className="mt-2" id={`sticker-${collection.id}`}>
                       {collection.name}
                     </h1>
-                    <div className="w-full grid grid-cols-5 justify-between">
+                    <div className="grid w-full grid-cols-5 justify-between">
                       {collection.stickers.map((sticker) => (
                         <SpriteRenderer
                           key={sticker.spriteURL}
@@ -100,7 +100,7 @@ const StickerPicker: FC<StickerPickerOpened> = ({ setIsOpened, onSelect }) => {
                 ))}
               </div>
 
-              <div className="flex-shrink-0 h-18 flex gap-2 w-full overflow-x-auto border-t border-t-dark-lighten p-2">
+              <div className="h-18 border-t-dark-lighten flex w-full flex-shrink-0 gap-2 overflow-x-auto border-t p-2">
                 {recentStickers.length > 0 && (
                   <button
                     onClick={() =>
@@ -108,7 +108,7 @@ const StickerPicker: FC<StickerPickerOpened> = ({ setIsOpened, onSelect }) => {
                         .querySelector(`#sticker-recent`)
                         ?.scrollIntoView()
                     }
-                    className="w-9 h-9 flex items-center"
+                    className="flex h-9 w-9 items-center"
                   >
                     <i className="bx bx-time text-[26px] leading-[26px]"></i>
                   </button>
@@ -120,7 +120,7 @@ const StickerPicker: FC<StickerPickerOpened> = ({ setIsOpened, onSelect }) => {
                         .querySelector(`#sticker-${collection.id}`)
                         ?.scrollIntoView()
                     }
-                    className="w-9 h-9 object-cover cursor-pointer"
+                    className="h-9 w-9 cursor-pointer object-cover"
                     src={collection.icon}
                     alt=""
                   />

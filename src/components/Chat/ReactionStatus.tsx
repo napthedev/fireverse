@@ -23,7 +23,7 @@ const ReactionStatus: FC<ReactionStatusProps> = ({ message, position }) => {
     <>
       <div
         onClick={() => setIsReactionStatusOpened(true)}
-        className={`absolute top-full -translate-y-1/2 bg-dark-lighten px-2 rounded-lg text-sm flex items-center gap-[2px] border border-dark cursor-pointer ${
+        className={`bg-dark-lighten border-dark absolute top-full flex -translate-y-1/2 cursor-pointer items-center gap-[2px] rounded-lg border px-2 text-sm ${
           position === "right"
             ? "right-8"
             : position === "left-tab"
@@ -42,7 +42,7 @@ const ReactionStatus: FC<ReactionStatusProps> = ({ message, position }) => {
           .map(([key, value]) => (
             <img
               key={key}
-              className="w-3 h-3"
+              className="h-3 w-3"
               src={Object.entries(REACTIONS_UI)[Number(key) - 1][1].icon}
               alt=""
             />
@@ -59,21 +59,21 @@ const ReactionStatus: FC<ReactionStatusProps> = ({ message, position }) => {
       {isReactionStatusOpened && (
         <div
           onClick={() => setIsReactionStatusOpened(false)}
-          className="fixed top-0 left-0 w-full h-full bg-[#00000080] flex justify-center items-center z-20 animate-fade-in"
+          className="animate-fade-in fixed top-0 left-0 z-20 flex h-full w-full items-center justify-center bg-[#00000080]"
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="bg-dark rounded-lg h-96 w-screen max-w-[400px] flex flex-col"
+            className="bg-dark flex h-96 w-screen max-w-[400px] flex-col rounded-lg"
           >
-            <div className="flex p-4 items-center border-b border-dark-lighten flex-shrink-0">
+            <div className="border-dark-lighten flex flex-shrink-0 items-center border-b p-4">
               <div className="flex-1"></div>
               <div className="flex-1">
-                <h1 className="text-2xl text-center">Reactions</h1>
+                <h1 className="text-center text-2xl">Reactions</h1>
               </div>
-              <div className="flex-1 flex justify-end">
+              <div className="flex flex-1 justify-end">
                 <button
                   onClick={() => setIsReactionStatusOpened(false)}
-                  className="h-8 w-8 rounded-full bg-dark-lighten flex items-center justify-center hover:brightness-125 transition duration-300"
+                  className="bg-dark-lighten flex h-8 w-8 items-center justify-center rounded-full transition duration-300 hover:brightness-125"
                 >
                   <i className="bx bx-x text-3xl"></i>
                 </button>
@@ -81,7 +81,7 @@ const ReactionStatus: FC<ReactionStatusProps> = ({ message, position }) => {
             </div>
 
             {loading || error ? (
-              <div className="flex-grow flex justify-center items-center">
+              <div className="flex flex-grow items-center justify-center">
                 <Spin />
               </div>
             ) : (
@@ -91,11 +91,11 @@ const ReactionStatus: FC<ReactionStatusProps> = ({ message, position }) => {
                   .map(([key, value]) => (
                     <div
                       key={key}
-                      className="flex justify-between px-5 py-2 items-center"
+                      className="flex items-center justify-between px-5 py-2"
                     >
-                      <div className="flex gap-3 items-center">
+                      <div className="flex items-center gap-3">
                         <img
-                          className="w-10 h-10 rounded-full object-cover"
+                          className="h-10 w-10 rounded-full object-cover"
                           src={IMAGE_PROXY(
                             usersInfo?.find((user) => user.id === key)?.data()
                               ?.photoURL
@@ -111,7 +111,7 @@ const ReactionStatus: FC<ReactionStatusProps> = ({ message, position }) => {
                       </div>
 
                       <img
-                        className="w-5 h-5"
+                        className="h-5 w-5"
                         src={Object.values(REACTIONS_UI)[value - 1].icon}
                         alt=""
                       />

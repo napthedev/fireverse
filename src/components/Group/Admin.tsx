@@ -32,19 +32,19 @@ const Admin: FC<AdminProps> = ({ conversation }) => {
 
   if (loading || error)
     return (
-      <div className="h-80 flex justify-center items-center">
+      <div className="flex h-80 items-center justify-center">
         <Spin />
       </div>
     );
 
   return (
-    <div className="h-80 flex flex-col items-stretch py-4 gap-4 overflow-y-auto overflow-x-hidden">
+    <div className="flex h-80 flex-col items-stretch gap-4 overflow-y-auto overflow-x-hidden py-4">
       {data
         ?.map((item) => item.data() as SavedUser)
         .map((user) => (
-          <div key={user.uid} className="flex gap-3 items-center px-4">
+          <div key={user.uid} className="flex items-center gap-3 px-4">
             <img
-              className="w-10 h-10 rounded-full object-cover flex-shrink-0"
+              className="h-10 w-10 flex-shrink-0 rounded-full object-cover"
               src={IMAGE_PROXY(user.photoURL)}
               alt=""
             />
@@ -55,15 +55,15 @@ const Admin: FC<AdminProps> = ({ conversation }) => {
 
             {conversation.group?.admins?.includes(currentUser?.uid as string) &&
               user.uid !== currentUser?.uid && (
-                <div className="flex-shrink-0 group relative" tabIndex={0}>
+                <div className="group relative flex-shrink-0" tabIndex={0}>
                   <button>
                     <i className="bx bx-dots-horizontal-rounded text-2xl"></i>
                   </button>
 
-                  <div className="group-focus-within:!opacity-100 group-focus-within:!visible opacity-0 invisible transition-all duration-300 absolute top-full right-0 flex flex-col items-stretch rounded-lg bg-dark-lighten border border-dark-lighten w-max py-1 z-[1]">
+                  <div className="bg-dark-lighten border-dark-lighten invisible absolute top-full right-0 z-[1] flex w-max flex-col items-stretch rounded-lg border py-1 opacity-0 transition-all duration-300 group-focus-within:!visible group-focus-within:!opacity-100">
                     <button
                       onClick={() => handleRemoveAdminPosition(user.uid)}
-                      className="flex items-center gap-1 px-3 py-1 bg-dark-lighten hover:brightness-125 transition duration-300"
+                      className="bg-dark-lighten flex items-center gap-1 px-3 py-1 transition duration-300 hover:brightness-125"
                     >
                       <i className="bx bx-user-x text-2xl"></i>
                       <span>Remove admin position</span>

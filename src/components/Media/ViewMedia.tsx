@@ -17,33 +17,33 @@ const ViewMedia: FC<ViewMediaProps> = ({ setIsOpened }) => {
   return (
     <div
       onClick={() => setIsOpened(false)}
-      className={`fixed top-0 left-0 w-full h-full bg-[#00000080] z-20 flex justify-center items-center transition-all duration-300 animate-fade-in`}
+      className={`animate-fade-in fixed top-0 left-0 z-20 flex h-full w-full items-center justify-center bg-[#00000080] transition-all duration-300`}
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-[500px] mx-2 bg-dark rounded-lg"
+        className="bg-dark mx-2 w-full max-w-[500px] rounded-lg"
       >
-        <div className="py-3 border-b border-dark-lighten flex justify-between items-center px-3">
+        <div className="border-dark-lighten flex items-center justify-between border-b py-3 px-3">
           <div className="flex-1"></div>
-          <div className="flex-1 flex justify-center items-center">
-            <h1 className="text-center text-2xl whitespace-nowrap">
+          <div className="flex flex-1 items-center justify-center">
+            <h1 className="whitespace-nowrap text-center text-2xl">
               View images and files
             </h1>
           </div>
-          <div className="flex-1 flex justify-end items-center">
+          <div className="flex flex-1 items-center justify-end">
             <button
               onClick={() => setIsOpened(false)}
-              className="w-8 h-8 bg-dark-lighten rounded-full flex justify-center items-center"
+              className="bg-dark-lighten flex h-8 w-8 items-center justify-center rounded-full"
             >
               <i className="bx bx-x text-2xl"></i>
             </button>
           </div>
         </div>
 
-        <div className="flex items-stretch border-b border-dark-lighten">
+        <div className="border-dark-lighten flex items-stretch border-b">
           <button
             onClick={() => setSelectedSection(Sections.images)}
-            className={`flex-1 text-center py-2 ${
+            className={`flex-1 py-2 text-center ${
               selectedSection === Sections.images ? "bg-dark-lighten" : ""
             }`}
           >
@@ -51,7 +51,7 @@ const ViewMedia: FC<ViewMediaProps> = ({ setIsOpened }) => {
           </button>
           <button
             onClick={() => setSelectedSection(Sections.files)}
-            className={`flex-1 text-center py-2 ${
+            className={`flex-1 py-2 text-center ${
               selectedSection === Sections.files ? "bg-dark-lighten" : ""
             }`}
           >

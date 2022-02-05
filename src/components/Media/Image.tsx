@@ -14,7 +14,7 @@ const ImageItem: FC<{ src: string }> = ({ src }) => {
     <>
       <img
         onClick={() => setIsImageViewOpened(true)}
-        className="w-[100px] h-[100px] object-cover hover:brightness-75 transition duration-300 cursor-pointer"
+        className="h-[100px] w-[100px] cursor-pointer object-cover transition duration-300 hover:brightness-75"
         src={src}
         alt=""
       />
@@ -41,7 +41,7 @@ const Image: FC = () => {
 
   if (loading || error)
     return (
-      <div className="h-80 flex justify-center items-center">
+      <div className="flex h-80 items-center justify-center">
         <Spin />
       </div>
     );
@@ -54,7 +54,7 @@ const Image: FC = () => {
     );
 
   return (
-    <div className="h-80 flex flex-wrap content-start gap-4 overflow-y-auto overflow-x-hidden p-4">
+    <div className="flex h-80 flex-wrap content-start gap-4 overflow-y-auto overflow-x-hidden p-4">
       {data?.docs.map((image) => (
         <ImageItem key={image.id} src={image.data().content} />
       ))}

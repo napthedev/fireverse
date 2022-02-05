@@ -35,19 +35,19 @@ const AddMembers: FC<AddMembersProps> = ({ conversations }) => {
 
   if (loading || error)
     return (
-      <div className="h-80 flex justify-center items-center">
+      <div className="flex h-80 items-center justify-center">
         <Spin />
       </div>
     );
 
   return (
-    <div className="h-80 flex flex-col items-stretch py-4 gap-4 overflow-y-auto overflow-x-hidden">
+    <div className="flex h-80 flex-col items-stretch gap-4 overflow-y-auto overflow-x-hidden py-4">
       {data?.docs
         ?.map((item) => item.data() as SavedUser)
         .map((user) => (
-          <div key={user.uid} className="flex gap-3 items-center px-4">
+          <div key={user.uid} className="flex items-center gap-3 px-4">
             <img
-              className="w-10 h-10 rounded-full object-cover flex-shrink-0"
+              className="h-10 w-10 flex-shrink-0 rounded-full object-cover"
               src={IMAGE_PROXY(user.photoURL)}
               alt=""
             />

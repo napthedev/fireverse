@@ -32,7 +32,7 @@ const App: FC = () => {
 
   if (typeof currentUser === "undefined")
     return (
-      <div className="min-h-screen flex justify-center items-center">
+      <div className="flex min-h-screen items-center justify-center">
         <BarWave />
       </div>
     );

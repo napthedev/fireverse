@@ -317,22 +317,22 @@ const InputSection: FC<InputSectionProps> = ({
   return (
     <>
       {fileDragging && (
-        <div className="fixed top-0 left-0 w-full h-full backdrop-blur-sm z-20 flex justify-center items-center pointer-events-none select-none">
+        <div className="pointer-events-none fixed top-0 left-0 z-20 flex h-full w-full select-none items-center justify-center backdrop-blur-sm">
           <h1 className="text-3xl">Drop file to send</h1>
         </div>
       )}
       {previewFiles.length > 0 && (
-        <div className="h-32 border-t border-dark-lighten flex items-center gap-2 px-4">
+        <div className="border-dark-lighten flex h-32 items-center gap-2 border-t px-4">
           {previewFiles.map((preview) => (
             <div key={preview} className="relative">
-              <img className="w-28 h-28 object-cover" src={preview} alt="" />
+              <img className="h-28 w-28 object-cover" src={preview} alt="" />
               <button
                 onClick={() =>
                   setPreviewFiles(
                     previewFiles.filter((item) => item !== preview)
                   )
                 }
-                className="absolute top-1 right-1 h-4 w-4 rounded-full flex items-center justify-center bg-gray-100"
+                className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-gray-100"
               >
                 <i className="bx bx-x text-dark text-lg"></i>
               </button>
@@ -341,7 +341,7 @@ const InputSection: FC<InputSectionProps> = ({
         </div>
       )}
       {previewFiles.length === 0 && !!replyInfo && (
-        <div className="h-[76px] border-t border-dark-lighten p-4 flex justify-between">
+        <div className="border-dark-lighten flex h-[76px] justify-between border-t p-4">
           <div>
             <div className="flex items-center gap-2">
               <ReplyIcon />
@@ -351,7 +351,7 @@ const InputSection: FC<InputSectionProps> = ({
               </p>
             </div>
             {replyInfo.type === "text" ? (
-              <p className="overflow-hidden whitespace-nowrap text-ellipsis max-w-[calc(100vw-65px)] md:max-w-[calc(100vw-420px)]">
+              <p className="max-w-[calc(100vw-65px)] overflow-hidden text-ellipsis whitespace-nowrap md:max-w-[calc(100vw-420px)]">
                 {replyInfo.content}
               </p>
             ) : replyInfo.type === "image" ? (
@@ -371,13 +371,13 @@ const InputSection: FC<InputSectionProps> = ({
         </div>
       )}
       <div
-        className={`flex items-stretch h-16 px-4 gap-1 border-t border-dark-lighten ${
+        className={`border-dark-lighten flex h-16 items-stretch gap-1 border-t px-4 ${
           disabled ? "pointer-events-none select-none" : ""
         }`}
       >
         <button
           onClick={() => imageInputRef.current?.click()}
-          className="flex-shrink-0 text-2xl text-primary flex items-center"
+          className="text-primary flex flex-shrink-0 items-center text-2xl"
         >
           <i className="bx bxs-image-add"></i>
         </button>
@@ -391,7 +391,7 @@ const InputSection: FC<InputSectionProps> = ({
         />
         <button
           onClick={() => fileInputRef.current?.click()}
-          className="flex-shrink-0 text-2xl text-primary flex items-center"
+          className="text-primary flex flex-shrink-0 items-center text-2xl"
         >
           <i className="bx bx-link-alt"></i>
         </button>
@@ -402,7 +402,7 @@ const InputSection: FC<InputSectionProps> = ({
           type="file"
           onChange={handleFileInputChange}
         />
-        <div className="flex-shrink-0 flex items-center relative">
+        <div className="relative flex flex-shrink-0 items-center">
           {isStickerPickerOpened && (
             <StickerPicker
               setIsOpened={setIsStickerPickerOpened}
@@ -418,7 +418,7 @@ const InputSection: FC<InputSectionProps> = ({
           </button>
         </div>
 
-        <div className="flex-shrink-0 flex items-center relative">
+        <div className="relative flex flex-shrink-0 items-center">
           {isGifPickerOpened && (
             <GifPicker setIsOpened={setIsGifPickerOpened} onSelect={sendGif} />
           )}
@@ -433,9 +433,9 @@ const InputSection: FC<InputSectionProps> = ({
 
         <form
           onSubmit={handleFormSubmit}
-          className="flex-grow flex items-stretch gap-1"
+          className="flex flex-grow items-stretch gap-1"
         >
-          <div className="flex-grow flex items-center relative">
+          <div className="relative flex flex-grow items-center">
             <input
               maxLength={1000}
               disabled={disabled}
@@ -446,7 +446,7 @@ const InputSection: FC<InputSectionProps> = ({
               }}
               onKeyDown={handleReplaceEmoji}
               onPaste={handlePaste}
-              className="w-full h-9 pl-3 pr-10 bg-dark-lighten outline-none rounded-full"
+              className="bg-dark-lighten h-9 w-full rounded-full pl-3 pr-10 outline-none"
               type="text"
               placeholder="Message..."
             />
@@ -466,7 +466,7 @@ const InputSection: FC<InputSectionProps> = ({
                   <div ref={ref} className="absolute bottom-full right-0">
                     <Suspense
                       fallback={
-                        <div className="w-[348px] h-[357px] bg-[#222222] border-[#555453] rounded-lg border-2 flex justify-center items-center">
+                        <div className="flex h-[357px] w-[348px] items-center justify-center rounded-lg border-2 border-[#555453] bg-[#222222]">
                           <Spin />
                         </div>
                       }
@@ -481,11 +481,11 @@ const InputSection: FC<InputSectionProps> = ({
             )}
           </div>
           {fileUploading ? (
-            <div className="flex items-center ml-1">
+            <div className="ml-1 flex items-center">
               <Spin width="24px" height="24px" color="#0D90F3" />
             </div>
           ) : (
-            <button className="flex-shrink-0 text-2xl text-primary flex items-center">
+            <button className="text-primary flex flex-shrink-0 items-center text-2xl">
               <i className="bx bxs-send"></i>
             </button>
           )}

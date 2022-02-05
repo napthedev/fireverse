@@ -53,7 +53,7 @@ const RightMessage: FC<RightMessageProps> = ({ message, setReplyInfo }) => {
 
   return (
     <div id={`message-${message.id}`}>
-      <div className="flex justify-end px-8 -mb-2">
+      <div className="-mb-2 flex justify-end px-8">
         {!!message.replyTo && (
           <ReplyBadge messageId={message.replyTo as string} />
         )}
@@ -64,7 +64,7 @@ const RightMessage: FC<RightMessageProps> = ({ message, setReplyInfo }) => {
             setReplyInfo(message);
           }
         }}
-        className={`flex flex-row-reverse items-center px-8 gap-2 group relative ${
+        className={`group relative flex flex-row-reverse items-center gap-2 px-8 ${
           Object.keys(message.reactions || {}).length > 0 ? "mb-2" : ""
         }`}
       >
@@ -82,7 +82,7 @@ const RightMessage: FC<RightMessageProps> = ({ message, setReplyInfo }) => {
               <div
                 onClick={(e) => e.stopPropagation()}
                 title={formattedDate}
-                className={`bg-primary text-white p-2 rounded-lg relative after:absolute after:left-full after:bottom-[6px] after:border-8 after:border-primary after:border-t-transparent after:border-r-transparent`}
+                className={`bg-primary after:border-primary relative rounded-lg p-2 text-white after:absolute after:left-full after:bottom-[6px] after:border-8 after:border-t-transparent after:border-r-transparent`}
               >
                 {splitLinkFromMessage(message.content).map((item, index) => (
                   <Fragment key={index}>
@@ -90,7 +90,7 @@ const RightMessage: FC<RightMessageProps> = ({ message, setReplyInfo }) => {
                       <span>{item}</span>
                     ) : (
                       <a
-                        className="inline mx-1 underline"
+                        className="mx-1 inline underline"
                         href={item.link}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -111,7 +111,7 @@ const RightMessage: FC<RightMessageProps> = ({ message, setReplyInfo }) => {
                 e.stopPropagation();
               }}
               title={formattedDate}
-              className="max-w-[60%] cursor-pointer hover:brightness-[85%] transition duration-300"
+              className="max-w-[60%] cursor-pointer transition duration-300 hover:brightness-[85%]"
               src={message.content}
               alt=""
             />
@@ -125,10 +125,10 @@ const RightMessage: FC<RightMessageProps> = ({ message, setReplyInfo }) => {
           <div
             onClick={(e) => e.stopPropagation()}
             title={formattedDate}
-            className="bg-dark-lighten flex items-center gap-2 rounded-lg overflow-hidden py-3 px-5"
+            className="bg-dark-lighten flex items-center gap-2 overflow-hidden rounded-lg py-3 px-5"
           >
             <FileIcon
-              className="w-4 h-4 object-cover"
+              className="h-4 w-4 object-cover"
               extension={message.file?.name.split(".").slice(-1)[0] as string}
             />
             <div>
@@ -161,7 +161,7 @@ const RightMessage: FC<RightMessageProps> = ({ message, setReplyInfo }) => {
           <div
             onClick={(e) => e.stopPropagation()}
             title={formattedDate}
-            className="p-3 border border-dark-lighten rounded-lg text-gray-400"
+            className="border-dark-lighten rounded-lg border p-3 text-gray-400"
           >
             Message has been removed
           </div>
@@ -171,7 +171,7 @@ const RightMessage: FC<RightMessageProps> = ({ message, setReplyInfo }) => {
           <>
             <button
               onClick={() => setIsSelectReactionOpened(true)}
-              className="text-gray-500 hover:text-gray-300 text-lg transition opacity-0 group-hover:opacity-100"
+              className="text-lg text-gray-500 opacity-0 transition hover:text-gray-300 group-hover:opacity-100"
             >
               <i className="bx bx-smile"></i>
             </button>
@@ -181,7 +181,7 @@ const RightMessage: FC<RightMessageProps> = ({ message, setReplyInfo }) => {
                 setReplyInfo(message);
                 e.stopPropagation();
               }}
-              className="text-gray-500 hover:text-gray-300 transition opacity-0 group-hover:opacity-100"
+              className="text-gray-500 opacity-0 transition hover:text-gray-300 group-hover:opacity-100"
             >
               <ReplyIcon />
             </button>
@@ -191,7 +191,7 @@ const RightMessage: FC<RightMessageProps> = ({ message, setReplyInfo }) => {
                 removeMessage(message.id as string);
                 e.stopPropagation();
               }}
-              className="text-gray-500 hover:text-gray-300 text-lg transition opacity-0 group-hover:opacity-100"
+              className="text-lg text-gray-500 opacity-0 transition hover:text-gray-300 group-hover:opacity-100"
             >
               <i className="bx bxs-trash"></i>
             </button>

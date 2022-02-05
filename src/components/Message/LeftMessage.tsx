@@ -48,7 +48,7 @@ const LeftMessage: FC<LeftMessageProps> = ({
       <div
         className={`${
           conversation.users.length === 2 ? "px-8" : "px-[70px]"
-        } flex -mb-2`}
+        } -mb-2 flex`}
       >
         {!!message.replyTo && (
           <ReplyBadge messageId={message.replyTo as string} />
@@ -60,13 +60,13 @@ const LeftMessage: FC<LeftMessageProps> = ({
             setReplyInfo(message);
           }
         }}
-        className={`flex items-center px-8 gap-2 group relative ${
+        className={`group relative flex items-center gap-2 px-8 ${
           Object.keys(message.reactions || {}).length > 0 ? "mb-2" : ""
         }`}
       >
         {conversation.users.length > 2 && (
           <div onClick={(e) => e.stopPropagation()} className="h-full py-1">
-            <div className="w-[30px] h-[30px]">
+            <div className="h-[30px] w-[30px]">
               {docs[index - 1]?.data()?.sender !== message.sender && (
                 <AvatarFromId uid={message.sender} />
               )}
@@ -88,9 +88,9 @@ const LeftMessage: FC<LeftMessageProps> = ({
               <div
                 onClick={(e) => e.stopPropagation()}
                 title={formattedDate}
-                className={`bg-dark-lighten text-white p-2 rounded-lg ${
+                className={`bg-dark-lighten rounded-lg p-2 text-white ${
                   conversation.users.length === 2
-                    ? "relative after:absolute after:right-full after:bottom-[6px] after:border-8 after:border-dark-lighten after:border-t-transparent after:border-l-transparent"
+                    ? "after:border-dark-lighten relative after:absolute after:right-full after:bottom-[6px] after:border-8 after:border-t-transparent after:border-l-transparent"
                     : ""
                 }`}
               >
@@ -100,7 +100,7 @@ const LeftMessage: FC<LeftMessageProps> = ({
                       <span>{item}</span>
                     ) : (
                       <a
-                        className="inline mx-1 underline"
+                        className="mx-1 inline underline"
                         href={item.link}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -121,7 +121,7 @@ const LeftMessage: FC<LeftMessageProps> = ({
                 e.stopPropagation();
               }}
               title={formattedDate}
-              className="max-w-[60%] cursor-pointer hover:brightness-[85%] transition duration-300"
+              className="max-w-[60%] cursor-pointer transition duration-300 hover:brightness-[85%]"
               src={message.content}
               alt=""
             />
@@ -135,10 +135,10 @@ const LeftMessage: FC<LeftMessageProps> = ({
           <div
             onClick={(e) => e.stopPropagation()}
             title={formattedDate}
-            className="bg-dark-lighten flex items-center gap-2 rounded-lg overflow-hidden py-3 px-5"
+            className="bg-dark-lighten flex items-center gap-2 overflow-hidden rounded-lg py-3 px-5"
           >
             <FileIcon
-              className="w-4 h-4 object-cover"
+              className="h-4 w-4 object-cover"
               extension={message.file?.name.split(".").slice(-1)[0] as string}
             />
             <div>
@@ -171,7 +171,7 @@ const LeftMessage: FC<LeftMessageProps> = ({
           <div
             onClick={(e) => e.stopPropagation()}
             title={formattedDate}
-            className="p-3 border border-dark-lighten rounded-lg text-gray-400"
+            className="border-dark-lighten rounded-lg border p-3 text-gray-400"
           >
             Message has been removed
           </div>
@@ -181,7 +181,7 @@ const LeftMessage: FC<LeftMessageProps> = ({
           <>
             <button
               onClick={() => setIsSelectReactionOpened(true)}
-              className="text-gray-500 hover:text-gray-300 text-lg transition opacity-0 group-hover:opacity-100"
+              className="text-lg text-gray-500 opacity-0 transition hover:text-gray-300 group-hover:opacity-100"
             >
               <i className="bx bx-smile"></i>
             </button>
@@ -190,7 +190,7 @@ const LeftMessage: FC<LeftMessageProps> = ({
                 setReplyInfo(message);
                 e.stopPropagation();
               }}
-              className="text-gray-500 hover:text-gray-300 transition opacity-0 group-hover:opacity-100"
+              className="text-gray-500 opacity-0 transition hover:text-gray-300 group-hover:opacity-100"
             >
               <ReplyIcon />
             </button>

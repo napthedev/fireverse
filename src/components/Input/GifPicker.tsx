@@ -30,7 +30,7 @@ const GifPicker: FC<GifPickerProps> = ({ setIsOpened, onSelect }) => {
       {(ref) => (
         <div
           ref={ref}
-          className="absolute left-[-92px] bottom-full bg-[#222222] border-dark-lighten border-2 shadow-2xl rounded-lg w-96 h-96 p-4 flex flex-col items-stretch"
+          className="border-dark-lighten absolute left-[-92px] bottom-full flex h-96 w-96 flex-col items-stretch rounded-lg border-2 bg-[#222222] p-4 shadow-2xl"
         >
           <div className="relative">
             <input
@@ -41,24 +41,24 @@ const GifPicker: FC<GifPickerProps> = ({ setIsOpened, onSelect }) => {
                 }, 500);
               }}
               type="text"
-              className="w-full rounded-full bg-dark-lighten outline-none pl-10 pr-4 py-2"
+              className="bg-dark-lighten w-full rounded-full py-2 pl-10 pr-4 outline-none"
               placeholder="Search..."
             />
-            <i className="bx bx-search absolute top-1/2 -translate-y-1/2 left-3 text-xl"></i>
+            <i className="bx bx-search absolute top-1/2 left-3 -translate-y-1/2 text-xl"></i>
           </div>
 
           {loading ? (
-            <div className="flex-grow flex justify-center items-center">
+            <div className="flex flex-grow items-center justify-center">
               <Spin />
             </div>
           ) : error ? (
-            <div className="flex-grow flex flex-col justify-center items-center">
+            <div className="flex flex-grow flex-col items-center justify-center">
               <p className="text-center">
                 Sorry... Giphy has limited the request
               </p>
             </div>
           ) : (
-            <div className="flex-grow overflow-y-auto flex flex-wrap mt-3 gap-2">
+            <div className="mt-3 flex flex-grow flex-wrap gap-2 overflow-y-auto">
               {(data as any).data.map((item: any) => (
                 <img
                   key={item.id}
@@ -66,7 +66,7 @@ const GifPicker: FC<GifPickerProps> = ({ setIsOpened, onSelect }) => {
                     onSelect(item?.images?.original?.url);
                     setIsOpened(false);
                   }}
-                  className="flex-1 h-[100px] object-cover cursor-pointer"
+                  className="h-[100px] flex-1 cursor-pointer object-cover"
                   src={item?.images?.original?.url}
                   alt=""
                 />

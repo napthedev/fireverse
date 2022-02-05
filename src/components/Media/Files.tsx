@@ -22,7 +22,7 @@ const Files: FC = () => {
 
   if (loading || error)
     return (
-      <div className="h-80 flex justify-center items-center">
+      <div className="flex h-80 items-center justify-center">
         <Spin />
       </div>
     );
@@ -35,11 +35,11 @@ const Files: FC = () => {
     );
 
   return (
-    <div className="h-80 overflow-y-auto flex flex-col items-stretch gap-3 p-4">
+    <div className="flex h-80 flex-col items-stretch gap-3 overflow-y-auto p-4">
       {data?.docs.map((file) => (
-        <div key={file.id} className="flex p-2 gap-4 items-center">
+        <div key={file.id} className="flex items-center gap-4 p-2">
           <FileIcon
-            className="w-6 h-6 object-cover"
+            className="h-6 w-6 object-cover"
             extension={file.data().file.name.split(".").slice(-1)[0]}
           />
           <div className="flex-grow">

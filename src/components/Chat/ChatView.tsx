@@ -105,7 +105,7 @@ const ChatView: FC<ChatViewProps> = ({
 
   if (loading)
     return (
-      <div className="flex-grow flex justify-center items-center">
+      <div className="flex flex-grow items-center justify-center">
         <Spin />
       </div>
     );
@@ -113,14 +113,14 @@ const ChatView: FC<ChatViewProps> = ({
   if (error)
     return (
       <div className="flex-grow">
-        <p className="text-center text-gray-400 mt-4">Something went wrong</p>
+        <p className="mt-4 text-center text-gray-400">Something went wrong</p>
       </div>
     );
 
   if (data?.empty)
     return (
       <div className="flex-grow">
-        <p className="text-center text-gray-400 mt-4">
+        <p className="mt-4 text-center text-gray-400">
           No message recently. Start chatting now.
         </p>
       </div>
@@ -164,7 +164,7 @@ const ChatView: FC<ChatViewProps> = ({
               {Object.entries(conversation.seen).filter(
                 ([key, value]) => key !== currentUser?.uid && value === item.id
               ).length > 0 && (
-                <div className="flex justify-end px-8 gap-[1px]">
+                <div className="flex justify-end gap-[1px] px-8">
                   {Object.entries(conversation.seen)
                     .filter(
                       ([key, value]) =>

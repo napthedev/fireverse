@@ -27,10 +27,10 @@ const Alert: FC<AlertProps> = ({
     <div
       className={`fixed top-5 right-5 ${
         isError ? "bg-red-500" : "bg-[#323232]"
-      } text-white p-4 rounded w-[calc(100vw-40px)] max-w-[300px] z-[9999] scale-100 transition-all duration-300 ${
+      } z-[9999] w-[calc(100vw-40px)] max-w-[300px] scale-100 rounded p-4 text-white transition-all duration-300 ${
         isOpened
-          ? "opacity-100 visible scale-100"
-          : "opacity-0 invisible scale-50"
+          ? "visible scale-100 opacity-100"
+          : "invisible scale-50 opacity-0"
       }`}
     >
       {text}

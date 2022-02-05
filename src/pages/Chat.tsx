@@ -36,19 +36,19 @@ const Chat: FC = () => {
     <div className="flex">
       <SideBar />
 
-      <div className="flex-grow flex flex-col items-stretch h-screen">
+      <div className="flex h-screen flex-grow flex-col items-stretch">
         {loading ? (
           <>
-            <div className="h-20 border-b border-dark-lighten"></div>
+            <div className="border-dark-lighten h-20 border-b"></div>
             <div className="flex-grow"></div>
             <InputSection disabled />
           </>
         ) : !conversation ||
           error ||
           !conversation.users.includes(currentUser?.uid as string) ? (
-          <div className="w-full h-full flex flex-col justify-center items-center gap-6">
-            <img className="w-32 h-32 object-cover" src="/error.svg" alt="" />
-            <p className="text-lg text-center">Conversation does not exists</p>
+          <div className="flex h-full w-full flex-col items-center justify-center gap-6">
+            <img className="h-32 w-32 object-cover" src="/error.svg" alt="" />
+            <p className="text-center text-lg">Conversation does not exists</p>
           </div>
         ) : (
           <>

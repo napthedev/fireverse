@@ -3,7 +3,7 @@ import { FC } from "react";
 const GifIcon: FC<{ className?: string }> = ({ className }) => {
   return (
     <svg
-      className={`w-[26px] h-[22px] object-contain text-primary ${
+      className={`text-primary h-[22px] w-[26px] object-contain ${
         className || ""
       }`}
       version="1.1"

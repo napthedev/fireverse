@@ -21,7 +21,7 @@ const ReplyBadge: FC<ReplyBadgeProps> = ({ messageId }) => {
   );
 
   if (loading || error)
-    return <div className="bg-[#4E4F50] rounded-lg h-10 w-20"></div>;
+    return <div className="h-10 w-20 rounded-lg bg-[#4E4F50]"></div>;
 
   return (
     <>
@@ -31,7 +31,7 @@ const ReplyBadge: FC<ReplyBadgeProps> = ({ messageId }) => {
           if (el) el.scrollIntoView({ behavior: "smooth" });
           else setIsAlertOpened(true);
         }}
-        className="bg-[#4E4F50] opacity-60 rounded-lg p-2 cursor-pointer"
+        className="cursor-pointer rounded-lg bg-[#4E4F50] p-2 opacity-60"
       >
         {data?.data()?.type === "text" ? (
           <p>{data?.data()?.content}</p>

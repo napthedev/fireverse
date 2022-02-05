@@ -1,4 +1,4 @@
-import { FC, HTMLProps, useState } from "react";
+import { FC, useState } from "react";
 
 import { FILE_ICON } from "../shared/constants";
 

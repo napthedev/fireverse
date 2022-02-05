@@ -37,7 +37,7 @@ const ReactionPopup: FC<ReactionPopupProps> = ({
   return (
     <div
       ref={forwardedRef}
-      className={`absolute bottom-[calc(100%+5px)] flex gap-1 bg-dark-lighten rounded-full shadow p-[6px] z-[1] animate-fade-in ${
+      className={`bg-dark-lighten animate-fade-in absolute bottom-[calc(100%+5px)] z-[1] flex gap-1 rounded-full p-[6px] shadow ${
         position === "left" ? "left-8" : "right-8"
       }`}
     >
@@ -46,7 +46,7 @@ const ReactionPopup: FC<ReactionPopupProps> = ({
           key={key}
           className={`${
             index + 1 === currentReaction
-              ? "relative after:absolute after:left-1/2 after:top-full after:-translate-x-1/2 after:w-[5px] after:h-[5px] after:rounded-full after:bg-primary"
+              ? "after:bg-primary relative after:absolute after:left-1/2 after:top-full after:h-[5px] after:w-[5px] after:-translate-x-1/2 after:rounded-full"
               : ""
           }`}
         >
@@ -57,7 +57,7 @@ const ReactionPopup: FC<ReactionPopupProps> = ({
               setIsOpened(false);
             }}
             title={key}
-            className={`w-7 h-7 cursor-pointer hover:scale-[115%] origin-bottom transition duration-300`}
+            className={`h-7 w-7 origin-bottom cursor-pointer transition duration-300 hover:scale-[115%]`}
             src={value.gif}
             alt=""
           />

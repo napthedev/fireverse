@@ -33,7 +33,7 @@ const AvatarFromId: FC<AvatarFromIdProps> = ({ uid, size = 30 }) => {
     <img
       title={data?.[0].data()?.displayName}
       style={{ width: size, height: size }}
-      className="object-cover rounded-full"
+      className="rounded-full object-cover"
       src={IMAGE_PROXY(data?.[0].data()?.photoURL)}
     ></img>
   );

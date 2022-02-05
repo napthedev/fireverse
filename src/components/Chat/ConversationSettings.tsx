@@ -83,23 +83,23 @@ const ConversationSettings: FC<ConversationConfigProps> = ({
   return (
     <div
       onClick={() => setIsOpened(false)}
-      className={`fixed top-0 left-0 w-full h-full bg-[#00000080] z-20 flex justify-center items-center transition-all duration-300 animate-fade-in`}
+      className={`animate-fade-in fixed top-0 left-0 z-20 flex h-full w-full items-center justify-center bg-[#00000080] transition-all duration-300`}
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-[500px] mx-2 bg-dark rounded-lg"
+        className="bg-dark mx-2 w-full max-w-[500px] rounded-lg"
       >
-        <div className="py-3 border-b border-dark-lighten flex justify-between items-center px-3">
+        <div className="border-dark-lighten flex items-center justify-between border-b py-3 px-3">
           <div className="flex-1"></div>
-          <div className="flex-1 flex justify-center items-center">
-            <h1 className="text-center text-2xl whitespace-nowrap">
+          <div className="flex flex-1 items-center justify-center">
+            <h1 className="whitespace-nowrap text-center text-2xl">
               Conversation settings
             </h1>
           </div>
-          <div className="flex-1 flex justify-end items-center">
+          <div className="flex flex-1 items-center justify-end">
             <button
               onClick={() => setIsOpened(false)}
-              className="w-8 h-8 bg-dark-lighten rounded-full flex justify-center items-center"
+              className="bg-dark-lighten flex h-8 w-8 items-center justify-center rounded-full"
             >
               <i className="bx bx-x text-2xl"></i>
             </button>
@@ -111,7 +111,7 @@ const ConversationSettings: FC<ConversationConfigProps> = ({
             <>
               <button
                 onClick={() => setIsChangeChatNameOpened((prev) => !prev)}
-                className="flex justify-between items-center px-3 py-2 gap-3 rounded-lg hover:brightness-125 bg-dark transition duration-300"
+                className="bg-dark flex items-center justify-between gap-3 rounded-lg px-3 py-2 transition duration-300 hover:brightness-125"
               >
                 <div className="flex items-center gap-3">
                   <i className="bx bx-edit-alt text-2xl"></i>
@@ -125,24 +125,24 @@ const ConversationSettings: FC<ConversationConfigProps> = ({
                 ></i>
               </button>
               {isChangeChatNameOpened && (
-                <form onSubmit={handleFormSubmit} className="flex gap-3 my-2">
+                <form onSubmit={handleFormSubmit} className="my-2 flex gap-3">
                   <div className="flex-grow">
                     <input
                       value={chatNameInputValue}
                       onChange={(e) => setChatNameInputValue(e.target.value)}
-                      className="w-full h-full outline-none border border-dark-lighten focus:border-gray-500 transition duration-300 p-2 rounded-lg bg-dark"
+                      className="border-dark-lighten bg-dark h-full w-full rounded-lg border p-2 outline-none transition duration-300 focus:border-gray-500"
                       type="text"
                       placeholder="Chat name"
                     />
                   </div>
-                  <button className="flex-shrink-0 bg-primary px-3 rounded hover:brightness-110 transition duration-300">
+                  <button className="bg-primary flex-shrink-0 rounded px-3 transition duration-300 hover:brightness-110">
                     Change
                   </button>
                 </form>
               )}
               <button
                 onClick={() => fileInputRef.current?.click()}
-                className="flex items-center px-3 py-2 gap-3 rounded-lg hover:brightness-125 bg-dark transition duration-300"
+                className="bg-dark flex items-center gap-3 rounded-lg px-3 py-2 transition duration-300 hover:brightness-125"
               >
                 <i className="bx bx-image-alt text-2xl"></i>
                 <span>Change group photo</span>
@@ -167,9 +167,9 @@ const ConversationSettings: FC<ConversationConfigProps> = ({
           )}
           <button
             onClick={() => setIsChangeThemeOpened((prev) => !prev)}
-            className="flex items-center justify-between px-3 py-2 gap-3 rounded-lg hover:brightness-125 bg-dark transition duration-300"
+            className="bg-dark flex items-center justify-between gap-3 rounded-lg px-3 py-2 transition duration-300 hover:brightness-125"
           >
-            <div className="flex gap-3 items-center">
+            <div className="flex items-center gap-3">
               <i className="bx bx-palette text-2xl"></i>
               <span>Change theme</span>
             </div>
@@ -182,13 +182,13 @@ const ConversationSettings: FC<ConversationConfigProps> = ({
           </button>
 
           {isChangeThemeOpened && (
-            <div className="flex gap-3 flex-wrap p-4">
+            <div className="flex flex-wrap gap-3 p-4">
               {THEMES.map((theme) => (
                 <div
                   key={theme}
                   style={{ background: theme }}
                   onClick={() => changeTheme(theme)}
-                  className={`w-14 h-14 rounded-full cursor-pointer ${
+                  className={`h-14 w-14 cursor-pointer rounded-full ${
                     conversation.theme === theme ? "check-overlay" : ""
                   }`}
                 ></div>
@@ -200,7 +200,7 @@ const ConversationSettings: FC<ConversationConfigProps> = ({
               setIsOpened(false);
               setMediaViewOpened(true);
             }}
-            className="flex items-center px-3 py-2 gap-3 rounded-lg hover:brightness-125 bg-dark transition duration-300"
+            className="bg-dark flex items-center gap-3 rounded-lg px-3 py-2 transition duration-300 hover:brightness-125"
           >
             <i className="bx bxs-file text-2xl"></i>
             <span>View images & files</span>

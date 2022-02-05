@@ -86,60 +86,60 @@ const CreateConversation: FC<CreateConversationProps> = ({ setIsOpened }) => {
   return (
     <div
       onClick={() => setIsOpened(false)}
-      className="fixed top-0 left-0 w-full h-full bg-[#00000080] flex justify-center items-center z-20"
+      className="fixed top-0 left-0 z-20 flex h-full w-full items-center justify-center bg-[#00000080]"
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="bg-dark rounded-lg overflow-hidden w-full max-w-[500px] mx-3"
+        className="bg-dark mx-3 w-full max-w-[500px] overflow-hidden rounded-lg"
       >
-        <div className="py-3 border-b border-dark-lighten flex justify-between items-center px-3">
+        <div className="border-dark-lighten flex items-center justify-between border-b py-3 px-3">
           <div className="flex-1"></div>
-          <div className="flex-1 flex justify-center items-center">
-            <h1 className="text-center text-2xl whitespace-nowrap">
+          <div className="flex flex-1 items-center justify-center">
+            <h1 className="whitespace-nowrap text-center text-2xl">
               New conversation
             </h1>
           </div>
-          <div className="flex-1 flex justify-end items-center">
+          <div className="flex flex-1 items-center justify-end">
             <button
               onClick={() => setIsOpened(false)}
-              className="w-8 h-8 bg-dark-lighten rounded-full flex justify-center items-center"
+              className="bg-dark-lighten flex h-8 w-8 items-center justify-center rounded-full"
             >
               <i className="bx bx-x text-2xl"></i>
             </button>
           </div>
         </div>
         {loading ? (
-          <div className="flex justify-center items-center h-96">
+          <div className="flex h-96 items-center justify-center">
             <Spin color="#0D90F3" />
           </div>
         ) : error ? (
-          <div className="flex justify-center items-center h-96">
+          <div className="flex h-96 items-center justify-center">
             <p className="text-center">Something went wrong</p>
           </div>
         ) : (
           <>
             {isCreating && (
-              <div className="absolute w-full h-full top-0 left-0 flex justify-center items-center bg-[#00000080] z-20">
+              <div className="absolute top-0 left-0 z-20 flex h-full w-full items-center justify-center bg-[#00000080]">
                 <Spin color="#0D90F3" />
               </div>
             )}
-            <div className="flex flex-col items-stretch gap-2 h-96 py-2 overflow-y-auto">
+            <div className="flex h-96 flex-col items-stretch gap-2 overflow-y-auto py-2">
               {data?.docs
                 .filter((doc) => doc.data().uid !== currentUser?.uid)
                 .map((doc) => (
                   <div
                     key={doc.data().uid}
                     onClick={() => handleToggle(doc.data().uid)}
-                    className="flex items-center gap-2 px-5 py-2 hover:bg-dark-lighten cursor-pointer transition"
+                    className="hover:bg-dark-lighten flex cursor-pointer items-center gap-2 px-5 py-2 transition"
                   >
                     <input
-                      className="cursor-pointer flex-shrink-0"
+                      className="flex-shrink-0 cursor-pointer"
                       type="checkbox"
                       checked={selected.includes(doc.data().uid)}
                       readOnly
                     />
                     <img
-                      className="h-8 w-8 rounded-full object-cover flex-shrink-0"
+                      className="h-8 w-8 flex-shrink-0 rounded-full object-cover"
                       src={IMAGE_PROXY(doc.data().photoURL)}
                       alt=""
                     />
@@ -147,11 +147,11 @@ const CreateConversation: FC<CreateConversationProps> = ({ setIsOpened }) => {
                   </div>
                 ))}
             </div>
-            <div className="flex justify-end p-3 border-t border-dark-lighten">
+            <div className="border-dark-lighten flex justify-end border-t p-3">
               <button
                 disabled={selected.length === 0}
                 onClick={handleCreateConversation}
-                className="bg-dark-lighten py-2 px-3 rounded-lg hover:brightness-125 transition duration-300 disabled:!brightness-[80%]"
+                className="bg-dark-lighten rounded-lg py-2 px-3 transition duration-300 hover:brightness-125 disabled:!brightness-[80%]"
               >
                 Start conversation
               </button>

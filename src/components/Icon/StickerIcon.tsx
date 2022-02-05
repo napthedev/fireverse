@@ -3,7 +3,7 @@ import { FC } from "react";
 const StickerIcon: FC<{ className?: string }> = ({ className }) => {
   return (
     <svg
-      className={`w-[24px] h-[24px] text-primary ${className || ""}`}
+      className={`text-primary h-[24px] w-[24px] ${className || ""}`}
       viewBox="0 0 512 512"
       fill="currentColor"
       xmlns="http://www.w3.org/2000/svg"
