@@ -64,7 +64,7 @@ const RightMessage: FC<RightMessageProps> = ({ message, setReplyInfo }) => {
             setReplyInfo(message);
           }
         }}
-        className={`group relative flex flex-row-reverse items-center gap-2 px-8 ${
+        className={`group relative flex flex-row-reverse items-stretch gap-2 px-8 ${
           Object.keys(message.reactions || {}).length > 0 ? "mb-2" : ""
         }`}
       >
