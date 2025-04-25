@@ -1,6 +1,8 @@
 export const DEFAULT_AVATAR = "/default-avatar.png";
 export const IMAGE_PROXY = (url: string) =>
-  `https://apoqrsgtqq.cloudimg.io/${url}`;
+  `https://wsrv.nl/?url=${encodeURIComponent(
+    url
+  )}&w=56&h=56&default=https%3A%2F%2Fcdn.jsdelivr.net%2Fgh%2Fnapthedev%2Ffireverse%40master%2Fpublic%2Fdefault-avatar.png`;
 
 export const STICKERS_URL =
   "https://cdn.jsdelivr.net/gh/naptestdev/zalo-stickers/data/favourite.json";
