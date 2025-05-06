@@ -150,6 +150,11 @@ const InputSection: FC<InputSectionProps> = ({
   };
 
   const uploadFile = async (file: File) => {
+    // Try to fix this issue:
+    alert(
+      "Google Firebase Storage no longer offers free storage. Sorry, but this feature is not available."
+    );
+    throw new Error("Google Firebase Storage no longer offers free storage.");
     try {
       const TWENTY_MB = 1024 * 1024 * 20;
 
