@@ -4,6 +4,7 @@ import {
   addDoc,
   collection,
   getDocs,
+  orderBy,
   query,
   serverTimestamp,
   where,
@@ -22,7 +23,11 @@ interface CreateConversationProps {
 const CreateConversation: FC<CreateConversationProps> = ({ setIsOpened }) => {
   const { data, error, loading } = useCollectionQuery(
     "all-users",
-    collection(db, "users")
+    query(
+      collection(db, "users"),
+      where("createdAt", "!=", null),
+      orderBy("createdAt", "desc")
+    )
   );
 
   const [isCreating, setIsCreating] = useState(false);

@@ -59,9 +59,9 @@ const SignIn: FC = () => {
             </a>
           </div>
 
-          <div className="flex flex-col-reverse gap-10 md:mt-5 md:flex-row md:gap-5 lg:mt-10">
+          <div className="md:gap-15 flex flex-col-reverse gap-12 md:mt-5 md:flex-row lg:mt-10">
             <div className="flex-1">
-              <img className="h-auto w-full" src="/illustration.svg" alt="" />
+              <img className="h-auto w-full" src="/welcome.jpg" alt="" />
             </div>
 
             <div className="mt-12 flex flex-1 flex-col items-center gap-4 md:items-start lg:mt-24">
